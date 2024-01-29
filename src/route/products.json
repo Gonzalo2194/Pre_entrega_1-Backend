@@ -1,0 +1,38 @@
+[
+  {
+    "id": "a4c73ad4-227b-4879-91ca-ef8e9cfe82ae",
+    "title": "Iphone 11",
+    "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
+    "price": 650,
+    "thumbnail": "asset/images/Iphone13.jpg",
+    "code": 1.1,
+    "stock": 5
+  },
+  {
+    "id": "b12d10c2-42db-4297-ba95-991854a95eb5",
+    "title": "Iphone 11",
+    "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
+    "price": 650,
+    "thumbnail": "asset/images/Iphone13.jpg",
+    "code": 1.1,
+    "stock": 5
+  },
+  {
+    "id": "f7f786f9-3dd5-486c-ad00-5861b4add382",
+    "title": "Iphone 11",
+    "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
+    "price": 650,
+    "thumbnail": "asset/images/Iphone13.jpg",
+    "code": 1.1,
+    "stock": 5
+  },
+  {
+    "id": "2c8c5182-646d-49a6-b2e1-47feb9899071",
+    "title": "Ipad pro 11",
+    "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
+    "price": 1000,
+    "thumbnail": "asset/images/ipadpro11.jpg",
+    "code": 1,
+    "stock": 10
+  }
+]
