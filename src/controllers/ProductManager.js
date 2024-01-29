@@ -175,6 +175,7 @@ class ProductManager {
 
         if (index !== -1) {
             response.splice(index, 1);
+            this.products = response;
             await this.guardarProducto();
         }
     }

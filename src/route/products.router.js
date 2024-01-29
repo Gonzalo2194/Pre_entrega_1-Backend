@@ -86,7 +86,7 @@ const express = require('express');
 const router = express.Router();
 const ProductManager = require('../controllers/ProductManager');
 
-// Rutas para obtener todos los productos o limitar la cantidad
+// Rutas para traer todos los productos y limit
 router.get("/", async (req, res) => {
     try {
         let { limit } = req.query;
@@ -108,7 +108,7 @@ router.get("/", async (req, res) => {
 });
 
 
-// Ruta para obtener un producto por ID
+// Ruta buscar un producto por ID
 router.get("/:pid", async (req, res) => {
     const { pid } = req.params;
 
