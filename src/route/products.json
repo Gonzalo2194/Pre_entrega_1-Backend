@@ -20,10 +20,12 @@
   {
     "id": "f7f786f9-3dd5-486c-ad00-5861b4add382",
     "title": "Iphone 11",
-    "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
+    "description": "PRUEBA POSTMAN Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
     "price": 650,
     "thumbnail": "asset/images/Iphone13.jpg",
     "code": 1.1,
-    "stock": 5
+    "stock": 10,
+    "status": true,
+    "category": "Celulares,Iphone"
   }
 ]

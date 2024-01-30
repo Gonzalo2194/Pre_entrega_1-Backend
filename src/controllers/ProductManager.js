@@ -120,9 +120,9 @@ class ProductManager {
         }
     }
 
-    async addProduct({ title, description, price, thumbnail, code, stock }) {
+    async addProduct({ title, description, price, thumbnail, code, stock,status = true ,category }) {
         const id = uuidv4();
-        let newItem = { id, title, description, price, thumbnail, code, stock };
+        let newItem = { id, title, description, price, thumbnail, code, stock ,status,category };
 
         this.products = await this.getProducts();
         this.products.push(newItem);
@@ -157,36 +157,35 @@ class ProductManager {
 
     async updateProduct(id, { ...data }) {
         const response = await this.getProducts();
-        const index = response.findIndex((product) => product.id === id);
-
+        const index = response.findIndex(product => product.id === id);
+    
         if (index !== -1) {
             response[index] = { id, ...data };
-            await this.guardarProducto();
+            await this.guardarProducto(response); 
             return response[index];
         } else {
             console.log('Producto no encontrado');
             return null;
         }
     }
-
+    
     async deleteProduct(id) {
         const response = await this.getProducts();
         const index = response.findIndex((product) => product.id === id);
-
+    
         if (index !== -1) {
             response.splice(index, 1);
-            this.products = response;
-            await this.guardarProducto();
+            await this.guardarProducto(response); // Corregir aquí
         }
     }
-
-    async guardarProducto() {
+    
+    async guardarProducto(products=this.products) {
         try {
-            await fs.writeFile(this.path, JSON.stringify(this.products, null, 2));
+            await fs.writeFile(this.path, JSON.stringify(products, null, 2));
         } catch (error) {
             console.log('Error al guardar productos:', error.message);
         }
     }
 }
 
-module.exports = new ProductManager(path.resolve(__dirname, '../route/products.json')); // Modifica la ruta según la ubicación correcta
+module.exports = new ProductManager(path.resolve(__dirname, '../route/products.json'));

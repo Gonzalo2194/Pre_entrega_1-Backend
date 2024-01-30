@@ -127,10 +127,10 @@ router.get("/:pid", async (req, res) => {
 });
 
 // Ruta para crear un nuevo producto
-router.post("/", (req, res) => {
+router.post("/", async(req, res) => {
     try {
         const newItem = req.body;
-        ProductManager.addProduct(newItem);
+        await ProductManager.addProduct(newItem);
         res.send({ status: "success", message: "Producto creado correctamente" });
     } catch (error) {
         console.log(error);
@@ -142,8 +142,8 @@ router.post("/", (req, res) => {
 router.put("/:pid", async (req, res) => {
     const { pid } = req.params;
     try {
-        const { title, description, price, thumbnail, code, stock } = req.body;
-        const response = await ProductManager.updateProduct(pid, { title, description, price, thumbnail, code, stock });
+        const { title, description, price, thumbnail, code, stock, status = true ,category } = req.body;
+        const response = await ProductManager.updateProduct(pid, { title, description, price, thumbnail, code, stock, status, category });
         res.json(response);
     } catch (error) {
         console.log(error);
@@ -156,7 +156,7 @@ router.delete("/:pid", async (req, res) => {
     const { pid } = req.params;
     try {
         await ProductManager.deleteProduct(pid);
-        res.send(`Producto con ID: ${pid} eliminado correctamente`);
+        res.json(`Producto con ID: ${pid} eliminado correctamente`);
     } catch (error) {
         console.log(error);
         res.status(500).send(`Error al eliminar producto con ID: ${pid}`);
