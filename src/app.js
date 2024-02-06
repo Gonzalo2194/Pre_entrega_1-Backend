@@ -30,10 +30,23 @@ const httpServer = app.listen(PUERTO, () => {
 
 const io = socket(httpServer);
 
-io.on ("connection",(socket) =>{
-    console.log("Un cliente se conectó conmigo")
-});
+io.on("connection", async (socket) => {
+    console.log("Un cliente se conectó conmigo");
 
+    // Emitir array de productos al cliente que se conectó:
+    socket.emit("productos", await ProductManager.getProducts());
+
+    socket.on("eliminarProducto", async (id) => {
+        await ProductManager.deleteProduct(id);
+
+        // Emitir el array actualizado de productos después de eliminar 
+        io.emit("productos", await ProductManager.getProducts());
+    });
+
+    socket.on("agregarProducto", async (producto) => {
+        await ProductManager.addProduct(producto);
+        io.emit("productos", await ProductManager.getProducts());
+    });});
 
 
 module.exports = {

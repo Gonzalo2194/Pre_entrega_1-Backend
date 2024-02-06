@@ -5,3 +5,11 @@
     display: block; 
     margin: auto; 
 }
+
+.card-img-top{
+    height: 10rem;
+    width: 10rem;
+    display: block; 
+    margin: auto; 
+    object-fit: contain; 
+}

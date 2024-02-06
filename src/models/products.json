@@ -1,45 +1,5 @@
 [
   {
-    "id": "a4c73ad4-227b-4879-91ca-ef8e9cfe82ae",
-    "title": "Iphone 11",
-    "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
-    "price": 650,
-    "thumbnail": "asset/images/Iphone13.jpg",
-    "code": 1.1,
-    "stock": 5
-  },
-  {
-    "id": "b12d10c2-42db-4297-ba95-991854a95eb5",
-    "title": "Iphone 11",
-    "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
-    "price": 650,
-    "thumbnail": "/asset/images/Iphone13.jpg",
-    "code": 1.1,
-    "stock": 5
-  },
-  {
-    "id": "f7f786f9-3dd5-486c-ad00-5861b4add382",
-    "title": "Iphone 11",
-    "description": "PRUEBA POSTMAN Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
-    "price": 650,
-    "thumbnail": "asset/images/Iphone13.jpg",
-    "code": 1.1,
-    "stock": 10,
-    "status": true,
-    "category": "Celulares,Iphone"
-  },
-  {
-    "id": "d04ff468-5034-4a19-8d77-223c56d0f84f",
-    "title": "Ipad pro 11",
-    "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
-    "price": 1000,
-    "thumbnail": "asset/images/ipadpro11.jpg",
-    "code": 5,
-    "stock": 10,
-    "status": true,
-    "category": "Tecnología, Portátiles, Ipad"
-  },
-  {
     "id": "aa88853c-cc7f-4407-9221-6785ba6527a3",
     "title": "Iphone 13 pro",
     "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
@@ -50,13 +10,13 @@
     "status": true
   },
   {
-    "id": "a5329df9-b88d-4959-a29d-2f807f5ba5f1",
-    "title": "Iphone 15 pro",
-    "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
-    "price": 650,
-    "thumbnail": "asset/images/Iphone13.jpg",
-    "code": 1.1,
-    "stock": 50,
-    "status": true
+    "id": "769938c1-3d03-44b5-ada5-0bb906a5462a",
+    "title": "prueba",
+    "description": "prueba1",
+    "price": "120",
+    "code": "test1",
+    "stock": "10",
+    "status": true,
+    "category": "ce"
   }
 ]

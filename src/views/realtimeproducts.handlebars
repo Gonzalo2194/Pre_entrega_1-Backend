@@ -1,0 +1,30 @@
+
+
+<h1>Real time products</h1>
+
+
+<div class="container">
+    <h1 class="mt-5">Real time products</h1>
+
+    <div id="contenedorProductos" class="row mt-4"></div></div>
+
+<h2>Agregar productos</h2>
+<form>
+      <input type="text" id="title" placeholder="Título">
+      <input type="text" id="description" placeholder ="Descripción">
+      <input type="number" id="price" placeholder="Precio">
+      <input type="text" id="img" value="sin imagen">
+      <input type="text" id="code" placeholder="Código">
+      <input type="text" id="category" placeholder="Categoría">
+      <input type="number" id="stock" placeholder="Stock">
+      <select id="status">
+          <option value="true">Activo</option>
+
+      </select>
+
+      <button id="btnEnviar">Enviar</button>
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js"></script>
+
+<script src="js/main.js"></script>
