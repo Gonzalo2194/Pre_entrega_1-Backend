@@ -4,7 +4,7 @@ const path = require('path');
     
     class CartManager {
         constructor(filePath) {
-            this.path = filePath || path.resolve(__dirname, '../route/cart.json');
+            this.path = filePath || path.resolve(__dirname, '../models/cart.json');
         }
     
         async getCart() {

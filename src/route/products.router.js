@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const ProductManager = require('../controllers/ProductManager');
 
+
 // Rutas para traer todos los productos y limit
 router.get("/", async (req, res) => {
     try {
@@ -78,5 +79,8 @@ router.delete("/:pid", async (req, res) => {
         res.status(500).send(`Error al eliminar producto con ID: ${pid}`);
     }
 });
+
+
+
 
 module.exports = router;

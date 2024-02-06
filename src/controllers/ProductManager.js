@@ -79,7 +79,7 @@ class ProductManager {
     
         if (index !== -1) {
             response.splice(index, 1);
-            await this.guardarProducto(response); // Corregir aquí
+            await this.guardarProducto(response); 
         }
     }
     
@@ -92,4 +92,4 @@ class ProductManager {
     }
 }
 
-module.exports = new ProductManager(path.resolve(__dirname, '../route/products.json'));
+module.exports = new ProductManager(path.resolve(__dirname, '../models/products.json'));

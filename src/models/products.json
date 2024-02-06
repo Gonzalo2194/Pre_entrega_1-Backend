@@ -13,7 +13,7 @@
     "title": "Iphone 11",
     "description": "Potencia y versatilidad en un dispositivo. Rendimiento excepcional, pantalla envolvente y diseño ultradelgado",
     "price": 650,
-    "thumbnail": "asset/images/Iphone13.jpg",
+    "thumbnail": "/asset/images/Iphone13.jpg",
     "code": 1.1,
     "stock": 5
   },
