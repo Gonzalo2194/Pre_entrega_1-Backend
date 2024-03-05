@@ -1,41 +1,44 @@
 const express = require('express');
 const cartRouter = express.Router();
-const CartManager = require('../controllers/CartManager');
+const CartManager = require('../controllers/cart.manager-db');
+const cartManager = new CartManager
 
 //Ruta para crear carrito
 
 cartRouter.post("/", async (req, res) => {
     try {
-        const response = await CartManager.newCart();
+        const response = await cartManager.crearCarrito();
         res.json(response);
     } catch (error) {
         res.send("Error al crear carrito");
     }
 });
 
-//ruta para traer carrito por id
-
 cartRouter.get("/:cid", async (req, res) => {
-    const { cid } = req.params;
+    const cartId = req.params.cid;
 
     try {
-        const response = await CartManager.getCartsProducts(cid);
-        res.json(response);
+        const carrito = await cartManager.getCarritoById(cartId);
+        res.json(carrito.products);
     } catch (error) {
-        res.send("Error al enviar productos al carrito");
+        console.error("Error al obtener carrito", error);
+        res.status(500).json({error:"Error interno del servidor"});
     }
 });
 
-//Ruta para actualizar carrito por id y traer productos
-
+// Ruta para actualizar carrito por id y traer productos
 cartRouter.post("/:cid/product/:pid", async (req, res) => {
-    const { cid, pid } = req.params;
+    const cartId = req.params.cid;
+    const productId = req.params.pid;
+    const quantity = req.body.quantity || 1;
 
     try {
-        await CartManager.addProductToCart(cid, pid);
-        res.send("Producto agregado correctamente");
+
+        const actualizarCarrito = await cartManager.agregarProductoAlCarrito(cartId, productId, quantity);
+        res.json(actualizarCarrito.products);
     } catch (error) {
-        res.send("Error al guardar producto en carrito");
+        console.error("Error al guardar producto en carrito");
+        res.status(500).json({error:"Error al interno del servidor"});
     }
 });
 
