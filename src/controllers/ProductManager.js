@@ -1,4 +1,4 @@
-const fs = require('fs').promises;
+/*const fs = require('fs').promises;
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
@@ -92,4 +92,4 @@ class ProductManager {
     }
 }
 
-module.exports = new ProductManager(path.resolve(__dirname, '../models/products.json'));
+module.exports = new ProductManager(path.resolve(__dirname, '../models/products.json'));*/

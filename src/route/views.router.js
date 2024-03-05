@@ -1,7 +1,7 @@
 
 const express = require('express');
 const vrouter = express.Router();
-const ProductManager = require('../controllers/ProductManager.js');
+const ProductManager = require('../controllers/product.manager-db.js');
 
 vrouter.get('/',async (req, res) =>{
     try {

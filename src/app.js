@@ -8,6 +8,7 @@ const viewsRouter = require("../src/route/views.router.js");
 const productsRouter = require('../src/route/products.router');
 const cartRouter = require('../src/route/cart.router');
 const socket = require('socket.io');
+require("./database.js");
 
 app.engine("handlebars",exphbs.engine());
 app.set('view engine',"handlebars"); 
@@ -15,8 +16,7 @@ app.set("views","./src/views")
 app.use(express.static ("./src/public"));
 
 
-
-app.use(express.json());
+app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/products", productsRouter);
