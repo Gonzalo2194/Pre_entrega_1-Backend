@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Estilos generales -->
+    <link rel="stylesheet" href="/css/productList.css"> <!-- Estilos específicos para productList -->
+</head>
+<body>
+    <h1 class="mt-5">Listado de Productos:</h1>
+    <div class="container mt-3">
+        <div class="row">
+            {{#each products}}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="{{this.thumbnail}}" class="card-img-top img-size img-fluid" alt="{{this.title}}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.title}}</h5>
+                            <p class="card-text">{{this.description}}</p>
+                            <p class="card-text">Precio: {{this.price}}</p>
+                        </div>
+                        <form action="/add-to-cart" method="post">
+                            <input type="hidden" name="productId" value="{{_id}}">
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+    <!-- Paginación -->
+    <div class="pagination">
+        {{#if hasPrevPage}}
+            <a href="{{prevLink}}">Previous</a>
+        {{/if}}
+        {{#if hasNextPage}}
+            <a href="{{nextLink}}">Next</a>
+        {{/if}}
+    </div>
+</body>
+</html>

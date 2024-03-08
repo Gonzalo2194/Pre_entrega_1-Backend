@@ -30,7 +30,19 @@ vrouter.get('/realtimeproducts', async (req, res) => {
     }
 });
 
+vrouter.get('/products', async (req, res) => {
+    try {
+        const { limit, page, sort, category, availability, query } = req.query;
+        const products = await productManager.getProducts(limit, page, query, sort, category, availability);
 
+        // Renderiza la vista con la lista de productos
+        res.render('layouts/productlist', { products });
+    } catch (error) {
+        console.error('Error al obtener la lista de productos', error);
+        res.status(500).json({ status: 'error', error: 'Error al obtener productos' });
+    }
+
+});
 
 
 

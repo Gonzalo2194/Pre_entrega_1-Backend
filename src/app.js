@@ -10,6 +10,7 @@ const productsRouter = require('../src/route/products.router');
 const cartRouter = require('../src/route/cart.router');
 const socket = require('socket.io');
 require("./database.js");
+app.use(express.static('public'));
 
 app.engine("handlebars",exphbs.engine());
 app.set('view engine',"handlebars"); 

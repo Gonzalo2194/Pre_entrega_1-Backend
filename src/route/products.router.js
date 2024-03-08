@@ -1,12 +1,12 @@
+// routes/products.js
+
 const express = require('express');
 const router = express.Router();
 const ProductManager = require("../../src/controllers/product.manager-db");
 const productManager = new ProductManager();
-
-//mongoose:
 const productosModel = require("../models/products.model");
 
-// Obtener productos:
+// Obtener productos
 router.get("/", async (req, res) => {
     try {
         let { limit, page, sort, query } = req.query;
@@ -84,7 +84,6 @@ router.get("/", async (req, res) => {
     }
 });
 
-
 // Ruta para obtener un producto por ID
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
@@ -142,4 +141,18 @@ router.delete("/:id", async (req, res) => {
         res.status(500).send(`Error al eliminar producto con ID: ${id}`);
     }
 });
+
+// Para obtener la lista de productos con paginación
+router.get('/list', async (req, res) => {
+    try {
+        const { limit, page, sort, category, availability, query } = req.query;
+        const products = await productManager.getProducts(limit, page, query, sort, category, availability);
+        // Renderizar la vista con la lista de productos
+        res.render('productList', { products });
+    } catch (error) {
+        console.error('Error al obtener la lista de productos', error);
+        res.status(500).json({ status: 'error', error: 'Error al obtener productos' });
+    }
+});
+
 module.exports = router;
