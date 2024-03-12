@@ -2,6 +2,7 @@ const express = require('express');
 const vrouter = express.Router();
 const ProductManager = require('../controllers/product.manager-db.js');
 const productManager = new ProductManager();
+const UserModel = require("../models/user.model");
 
 vrouter.get('/', async (req, res) => {
     try {
@@ -35,8 +36,10 @@ vrouter.get('/products', async (req, res) => {
         const { limit, page, sort, category, availability, query } = req.query;
         const products = await productManager.getProducts(limit, page, query, sort, category, availability);
 
+        // Verifica si req.session está definido y si tiene la propiedad usuario
+        const currentUser = req.session && req.session.usuario ? await UserModel.findOne({ email: req.session.usuario }) : null;
         // Renderiza la vista con la lista de productos
-        res.render('layouts/productlist', { products });
+        res.render('layouts/productlist', { products,currentUser});
     } catch (error) {
         console.error('Error al obtener la lista de productos', error);
         res.status(500).json({ status: 'error', error: 'Error al obtener productos' });

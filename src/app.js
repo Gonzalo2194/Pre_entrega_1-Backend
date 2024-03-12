@@ -9,6 +9,10 @@ const viewsRouter = require("../src/route/views.router.js");
 const productsRouter = require('../src/route/products.router');
 const cartRouter = require('../src/route/cart.router');
 const socket = require('socket.io');
+const MongoStore = require("connect-mongo");
+const session = require("express-session");
+const userRouter = require("../src/route/user.router.js");
+const sessionRouter = require("../src/route/sessions.router.js")
 require("./database.js");
 app.use(express.static('public'));
 
@@ -18,12 +22,24 @@ app.set("views","./src/views")
 app.use(express.static ("./src/public"));
 
 
+
+
+
+
+
+app.set('view engine', 'handlebars');
+
+
+
+
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/",viewsRouter);
+app.use("/api/users", userRouter);//Ruta login
+app.use("/api/sessions", sessionRouter); //Ruta session
 
 const httpServer = app.listen(PUERTO, () => {
     console.log(`Escuchando desde ${PUERTO}`);
@@ -50,6 +66,59 @@ io.on("connection", async (socket) => {
         io.emit("productos", await ProductManager.getProducts());
     });});
 
+    app.use(session({      
+            secret: "secretCoder",
+            resave: true,
+            saveUninitialized: true,
+            store:MongoStore.create({
+                mongoUrl: "mongodb+srv://gonzalosoto2194:Yanigonza0721@cluster0.rp4awlz.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Cluster0",ttl:3000
+            })
+        }));
+
+app.get("/login", (req, res) => {
+            let usuario = req.query.usuario;
+        
+            req.session = req.session || {};
+        
+            req.session.usuario = usuario;
+            res.send("Guardamos el usuario por medio de query");
+        });
+        
+        //Verificamos el usuario guardado
+        
+app.get("/usuario", (req,res) =>{
+            if(req.session.usuario){
+                return res.send (`el usuario registrado es: ${req.session.usuario}`); 
+            }
+        
+            res.send("No tenemos un usuario registrado");
+        })
+        
+
+app.get("/logout",(req, res) => {
+            //para eliminar datos de una variable de sesiones se usa parametro de request y el método se llama destroy.
+            
+            //Callback:
+        req.session.destroy((error)=>{
+            if(!error){
+                res.send("Sesión cerrada!");
+            }else{
+                res.send({status:"error al logout", body: error});
+            }
+        })
+        });
+
+function auth(req, res, next) {
+            if (req.session.login && req.session.admin) {
+                return next();
+            }
+            return res.status(401).send("Error de autorización");
+        }
+        
+// Ruta admin
+        app.get("/admin", auth, (req, res) => {
+            res.send("Bienvenido, administrador");
+        });
 
 module.exports = {
     productManager,
