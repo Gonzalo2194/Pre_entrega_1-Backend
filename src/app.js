@@ -4,31 +4,32 @@ const PUERTO = 8080;
 const ProductManager = require('./controllers/product.manager-db');
 const CartManager = require('./controllers/cart.manager-db');
 const cartManager = new CartManager();
-const exphbs = require("express-handlebars");
-const viewsRouter = require("../src/route/views.router.js");
+const exphbs = require('express-handlebars');
+const viewsRouter = require('../src/route/views.router.js');
 const productsRouter = require('../src/route/products.router');
 const cartRouter = require('../src/route/cart.router');
 const socket = require('socket.io');
-const MongoStore = require("connect-mongo");
-const session = require("express-session");
-const userRouter = require("../src/route/user.router.js");
-const sessionRouter = require("../src/route/sessions.router.js")
-require("./database.js");
+const session = require('express-session');
+const MongoStore = require('connect-mongo') ;
+const userRouter = require('../src/route/user.router.js');
+const sessionRouter = require('../src/route/sessions.router.js');
+require('../src/database.js');
+const UserModel = require('./models/user.model.js');
 app.use(express.static('public'));
 
-app.engine("handlebars",exphbs.engine());
-app.set('view engine',"handlebars"); 
-app.set("views","./src/views") 
-app.use(express.static ("./src/public"));
+// Configuración de Handlebars
+const hbs = exphbs.create({
+    defaultLayout: 'main',
+    runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+    },
+});
 
-
-
-
-
-
-
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
-
+app.set('views', './src/views');
+app.use(express.static('./src/public'));
 
 
 
@@ -66,39 +67,34 @@ io.on("connection", async (socket) => {
         io.emit("productos", await ProductManager.getProducts());
     });});
 
-    app.use(session({      
-            secret: "secretCoder",
-            resave: true,
-            saveUninitialized: true,
-            store:MongoStore.create({
-                mongoUrl: "mongodb+srv://gonzalosoto2194:Yanigonza0721@cluster0.rp4awlz.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Cluster0",ttl:3000
-            })
+
+        app.use(session({      
+        secret: "secretCoder",
+        resave: true,
+        saveUninitialized: true,
+        store: MongoStore.create({
+            mongoUrl: "mongodb+srv://gonzalosoto2194:Yanigonza0721@cluster0.rp4awlz.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Cluster0",
+            ttl: 5000
+        })
         }));
 
 app.get("/login", (req, res) => {
-            let usuario = req.query.usuario;
-        
-            req.session = req.session || {};
-        
-            req.session.usuario = usuario;
-            res.send("Guardamos el usuario por medio de query");
-        });
-        
-        //Verificamos el usuario guardado
-        
-app.get("/usuario", (req,res) =>{
-            if(req.session.usuario){
-                return res.send (`el usuario registrado es: ${req.session.usuario}`); 
-            }
-        
-            res.send("No tenemos un usuario registrado");
-        })
-        
+    let usuario = req.query.usuario;
+
+    req.session.usuario = usuario;
+    res.send("Guardamos el usuario por medio de query");
+});
+
+app.get("/usuario", (req, res) => {
+    if (req.session.usuario) {
+        return res.send(`El usuario registrado es: ${req.session.usuario}`);
+    }
+
+    res.send("No tenemos un usuario registrado");
+});
 
 app.get("/logout",(req, res) => {
-            //para eliminar datos de una variable de sesiones se usa parametro de request y el método se llama destroy.
-            
-            //Callback:
+
         req.session.destroy((error)=>{
             if(!error){
                 res.send("Sesión cerrada!");
@@ -119,8 +115,3 @@ function auth(req, res, next) {
         app.get("/admin", auth, (req, res) => {
             res.send("Bienvenido, administrador");
         });
-
-module.exports = {
-    productManager,
-    CartManager,
-};

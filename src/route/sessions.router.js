@@ -10,16 +10,16 @@ const UserModel = require("../models/user.model.js");
             const usuario = await UserModel.findOne({ email: email });
     
             if (usuario) {
-                // Verificar que req.session esté definido
+                
                 if (!req.session) {
                     req.session = {};
                 }
-                // Identificar si el password es el correcto después de chequear que existe el email
+                // Si el password es el correcto después de chequear que existe el email
                 if (usuario.password === password) {
                     
                     req.session.usuario = usuario;
                     req.session.login = true;
-                    
+
                 if (usuario.role === "admin") {
                         req.session.admin = true;
                 } else {
@@ -37,7 +37,7 @@ const UserModel = require("../models/user.model.js");
             res.status(400).send({ error: "Error en el inicio de sesión: " + error.message });
         }
     });
-    
+
 
     //Logout:
 

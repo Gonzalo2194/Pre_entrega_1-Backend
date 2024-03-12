@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const UserModel = require("../models/user.model");
+const UserModel = require("../models/user.model.js");
 
 //post para generar usuario y almacenar:
 
