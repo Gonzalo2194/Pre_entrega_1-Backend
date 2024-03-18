@@ -5,6 +5,7 @@ const productManager = new ProductManager();
 const UserModel = require("../models/user.model");
 
 
+
 vrouter.get('/', async (req, res) => {
     try {
         const products = await productManager.getProducts();
@@ -41,14 +42,15 @@ vrouter.get('/products', async (req, res) => {
         const currentUser = req.session && req.session.usuario ? await UserModel.findOne({ email: req.session.usuario }) : null;
         console.log(currentUser);
         // Renderiza la vista con la lista de productos
-        res.render('layouts/productlist', { products,currentUser});
-        
+        return res.render('layouts/productlist', { products, user: currentUser });
     } catch (error) {
         console.error('Error al obtener la lista de productos', error);
         res.status(500).json({ status: 'error', error: 'Error al obtener productos' });
     }
 
 });
+
+
 
 
 
