@@ -78,7 +78,11 @@ io.on("connection", async (socket) => {
 });
 
 app.get("/login", (req, res) => {
-    res.render("layouts/login");
+    if (req.session.login) {
+        return res.redirect("/profile");
+    } else {
+        res.render("layouts/login");
+    }
 });
 
 app.get("/usuario", (req, res) => {
@@ -104,29 +108,33 @@ function auth(req, res, next) {
 //Register:
 
 app.get('/register', async (req, res) => {
-            try {
-                res.render('layouts/register');
-            } catch (error) {
-                console.log("Error en la vista", error);
-                res.status(500).json({ error: "Error interno del servidor" });
-            }
-        });
+    if (req.session.login) {
+        return res.redirect("/profile");
+    } else {
+        try {
+            res.render('layouts/register');
+        } catch (error) {
+            console.log("Error en la vista", error);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
+    }
+});
 
 
-        app.get("/profile", async (req, res) => {
-            try {
-                if (req.session && req.session.user) {
-                    const user = await UserModel.findById(req.session.user._id);
-                    if (user) {
-                        res.render('layouts/profile', { user });
-                    } else {
-                        res.status(404).send('Usuario no encontrado');
-                    }
-                } else {
-                    res.redirect('/layouts/profile');
-                }
-            } catch (error) {
-                console.error('Error al obtener el perfil del usuario:', error);
-                res.status(500).send('Error interno del servidor');
+app.get("/profile", async (req, res) => {
+    try {
+        if (req.session && req.session.user) {
+            const user = await UserModel.findById(req.session.user._id);
+            if (user) {
+                res.render('layouts/profile', { user });
+            } else {
+                res.status(404).send('Usuario no encontrado');
             }
-        });
+        } else {
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.error('Error al obtener el perfil del usuario:', error);
+        res.status(500).send('Error interno del servidor');
+    }
+});

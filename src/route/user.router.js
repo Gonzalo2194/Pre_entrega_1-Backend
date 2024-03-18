@@ -1,24 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserModel = require("../models/user.model.js");
-
-//post para generar usuario y almacenar:
-
-/*router.post("/",async (req, res)=>{
-    const{first_name,last_name,email,password,age} = req.body;
-
-    try {
-        await UserModel.create({first_name,last_name,email,password,age})
-
-        res.status(200).send({message:"Usuario creado con éxito"});
-    } catch (error) {
-        console.error("Error al crear usuario:", error);
-    res.status(400).send({ error: "Error al crear usuario", details: error.message });
-    }
-});*/
-
-
-//Handlebars de login:
+const {createHash} = require("../utils/hashbcrypt.js");
 
 router.post("/", async (req, res) => {
     const { first_name, last_name, email, password, age } = req.body;
@@ -33,14 +16,13 @@ router.post("/", async (req, res) => {
             first_name,
             last_name,
             email,
-            password,
+            password : createHash (password),
             age,
         });
         if (!req.session) {
             req.session = {};
         }
         req.session.login = true;
-        
         req.session.user = { ...nuevoUsuario._doc };
 
         res.redirect("/profile");
