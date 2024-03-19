@@ -134,8 +134,8 @@ app.get('/register', async (req, res) => {
 app.get("/profile", async (req, res) => {
     try {
         if (req.session && req.session.user) {
-            const user = await UserModel.findById(req.session.user._id);
-            if (!user) {
+            const user = await UserModel.findOne({ email: req.session.user.email });
+            if (user) {
                 res.render('layouts/profile', { user });
             } else {
                 res.status(404).send('Usuario no encontrado');

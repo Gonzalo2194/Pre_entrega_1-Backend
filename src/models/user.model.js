@@ -30,6 +30,7 @@ const userSchema = mongoose.Schema({
             return this.email === "adminCoder@coder.com" ? "admin" : "usuario";
         },
     },
+    
 });
 
 const UserModel=mongoose.model("user",userSchema);
