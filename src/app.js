@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const PUERTO = 8080;
+require('../src/database.js');
 const MongoStore = require('connect-mongo');
 const session = require('express-session');
 const ProductManager = require('./controllers/product.manager-db');
@@ -11,9 +12,15 @@ const productsRouter = require('../src/route/products.router');
 const cartRouter = require('../src/route/cart.router');
 const socket = require('socket.io');
 const userRouter = require('../src/route/user.router.js');
-const sessionRouter = require('../src/route/sessions.router.js');
-require('../src/database.js');
 const UserModel = require('./models/user.model.js');
+const passport = require('passport'); // Importa el módulo passport
+const LocalStrategy = require('passport-local').Strategy; // Importa la estrategia local de passport
+const initializePassport = require('./config/config.passport.js');
+const sessionRouter = require('../src/route/sessions.router.js');
+
+
+
+
 
 
 // Configuración de Handlebars
@@ -39,17 +46,26 @@ app.use(session({
     saveUninitialized: false,
     store: MongoStore.create({
         mongoUrl: "mongodb+srv://gonzalosoto2194:Yanigonza0721@cluster0.rp4awlz.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Cluster0",
-        ttl: 2000
+        ttl: 1000
     })
 }));
 
+////////////////////////////////
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+////////////////////////////////
+app.use("/api/sessions", sessionRouter); // Ruta de sesión
 // Rutas
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/", viewsRouter);
 app.use("/api/users", userRouter); // Ruta login
-app.use("/api/sessions", sessionRouter); // Ruta session
-app.use('/register', userRouter); // Ruta para registrar usuario
+
+
 
 const httpServer = app.listen(PUERTO, () => {
     console.log(`Escuchando desde ${PUERTO}`);
@@ -111,21 +127,15 @@ app.get('/register', async (req, res) => {
     if (req.session.login) {
         return res.redirect("/profile");
     } else {
-        try {
-            res.render('layouts/register');
-        } catch (error) {
-            console.log("Error en la vista", error);
-            res.status(500).json({ error: "Error interno del servidor" });
-        }
+        res.render('layouts/register');
     }
 });
-
 
 app.get("/profile", async (req, res) => {
     try {
         if (req.session && req.session.user) {
             const user = await UserModel.findById(req.session.user._id);
-            if (user) {
+            if (!user) {
                 res.render('layouts/profile', { user });
             } else {
                 res.status(404).send('Usuario no encontrado');

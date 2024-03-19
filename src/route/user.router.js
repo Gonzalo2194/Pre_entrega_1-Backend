@@ -2,36 +2,28 @@ const express = require('express');
 const router = express.Router();
 const UserModel = require("../models/user.model.js");
 const {createHash} = require("../utils/hashbcrypt.js");
+const passport = require("passport");
 
-router.post("/", async (req, res) => {
-    const { first_name, last_name, email, password, age } = req.body;
 
-    try {
-        const existeUsuario = await UserModel.findOne({ email: email });
-        if (existeUsuario) {
-            return res.status(400).send({ error: "El e-mail ya está siendo utilizado" });
-        }
-        
-        const nuevoUsuario = await UserModel.create({
-            first_name,
-            last_name,
-            email,
-            password : createHash (password),
-            age,
-        });
-        if (!req.session) {
-            req.session = {};
-        }
-        req.session.login = true;
-        req.session.user = { ...nuevoUsuario._doc };
+router.post("/", passport.authenticate("register",{failureRedirect:"/failedregister"}), async(req,res)=>{
+    if(req.user) return res.status(400).send({status:"error"});
 
-        res.redirect("/profile");
+    req.session.user = {
+        first_name : req.user.first_name,
+        last_name : req.user.last_name,
+        age: req.user.age,
+        email: req.user.email
+    };
 
-    } catch (error) {
-        console.error("Error al crear el usuario:", error);
-        res.status(500).send({ error: "Error al crear el usuario" });
-    }
-});
+    req.session.login = true;
+
+    res.redirect("/profile");
+})
+    
+router.get("/failedregister", (req, res) => {
+    res.send({error:"Registro fallido"});
+})
+
 
 
 

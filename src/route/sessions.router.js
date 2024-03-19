@@ -2,35 +2,40 @@ const express = require('express');
 const router = express.Router();
 const UserModel = require("../models/user.model")
 const {isValidPassword} = require('../utils/hashbcrypt.js');
+const passport = require("passport");
 
-//login:
-router.post("/login", async(req, res) => {
-    const {email,password} = req.body;
-    try {
-        const usuario = await UserModel.findOne({email: email})
-        if (usuario) {
-                if(isValidPassword(password,usuario)) {
-                req.session.login =true;
-                req.session.user = {...usuario._doc};
+//login con passport
 
-                return res.redirect("/profile");
-
-            }else {
-                res.status (401).send({error:"Contraseña no valida"})
+router.post("/login", (req, res, next) => {
+    passport.authenticate("login", { failureRedirect: "/api/sessions/faillogin" }, async (err, user, info) => {
+        try {
+            if (err) {
+                return next(err);
             }
-        }else{
-            res.status(404).send({ error: "Usuario no encontrado" });
+            if (!user) {
+                return res.status(400).send({ status: "error" });
+            }
+            // Verificar la contraseña del usuario utilizando isValidPassword
+            if (!isValidPassword(req.body.password, user)) {
+                return res.status(400).send({ status: "error", message: "Contraseña incorrecta" });
+            }
+            req.session.user = {
+                first_name: user.first_name,
+                last_name: user.last_name,
+                age: user.age,
+                email: user.email
+            };
+            req.session.login = true;
+            res.redirect("/profile");
+        } catch (error) {
+            next(error);
         }
-    } catch (error) {
-        res.status(400).send({ error: "Error en login" });
-    }
-    });
+    })(req, res, next);
+});
 
-
-
-
-
-
+router.get("/faillogin", async (req, res) => {
+    res.send({ error: "Login fallido" });
+});
 
 
 
