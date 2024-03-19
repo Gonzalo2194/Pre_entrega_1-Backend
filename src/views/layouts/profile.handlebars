@@ -1,6 +1,26 @@
-<h1>Mi perfil</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/public/css/style.profile.css">
+</head>
+<body>
+    
+</body>
+</html>
+</head>
+<body>
+    <div class="card">
+        <h1>Mi perfil</h1>
+        <p>Bienvenido, {{user.first_name}}.</p>
+        <p>E-mail: {{user.email}}</p>
+        <p>Edad: {{user.age}}</p>
 
-<p>Bienvenido, {{user.first_name}}.</p>
-<p>E-mail: {{user.email}}</p>
-<p>Edad: {{user.age}}</p>
-<a href="/api/sessions/logout">Logout</a>
+        <a href="/api/sessions/logout">Logout</a>
+    </div>
+</body>
+</html>
+
+
+

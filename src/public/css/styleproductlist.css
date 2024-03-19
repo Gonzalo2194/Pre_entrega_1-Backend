@@ -20,11 +20,6 @@ h1 {
     border: 1px solid #dee2e6;
     border-radius: 10px;
     overflow: hidden;
-    transition: transform 0.3s ease-in-out;
-}
-
-.card:hover {
-    transform: scale(1.05);
 }
 
 .card-img-top {
