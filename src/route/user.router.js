@@ -5,26 +5,28 @@ const {createHash} = require("../utils/hashbcrypt.js");
 const passport = require("passport");
 
 
-router.post("/", passport.authenticate("register",{failureRedirect:"/failedregister"}), async(req,res)=>{
-    if(req.user) return res.status(400).send({status:"error"});
+router.post('/', passport.authenticate('register', { failureRedirect: '/login' }), async (req, res) => {
+    try {
 
-    req.session.user = {
-        first_name : req.user.first_name,
-        last_name : req.user.last_name,
-        age: req.user.age,
-        email: req.user.email
-    };
+        if (req.session.user) {
+            return res.status(400).send({ status: 'error', message: 'Usuario ya autenticado' });
+        }
 
-    req.session.login = true;
+        const { first_name, last_name, age, email } = req.user;
 
-    res.redirect("/profile");
-})
-    
-router.get("/failedregister", (req, res) => {
-    res.send({error:"Registro fallido"});
-})
+        req.session.user = {
+            first_name,
+            last_name,
+            age,
+            email
+        };
 
-
+        res.redirect('/profile');
+    } catch (error) {
+        console.error('Error al procesar la autenticación del usuario:', error);
+        res.status(500).send({ status: 'error', message: 'Error interno del servidor' });
+    }
+});
 
 
 module.exports = router;

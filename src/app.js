@@ -56,7 +56,6 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 ////////////////////////////////
 app.use("/api/sessions", sessionRouter); // Ruta de sesión
 // Rutas
