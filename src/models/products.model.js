@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema ({
         },
     code:{
         type: Number,
-        unique:true,
+        unique:false,
         required:true,
         },
     stock:{
@@ -35,7 +35,7 @@ const productSchema = new mongoose.Schema ({
         type: Boolean,
         required:true,
         },
-    thumbnails:[],
+    thumbnail:[],
 });
 
 //defino modelo

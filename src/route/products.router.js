@@ -6,6 +6,9 @@ const ProductManager = require("../../src/controllers/product.manager-db");
 const productManager = new ProductManager();
 const productosModel = require("../models/products.model");
 
+
+
+
 // Obtener productos
 router.get("/", async (req, res) => {
     try {
@@ -84,6 +87,8 @@ router.get("/", async (req, res) => {
     }
 });
 
+
+
 // Ruta para obtener un producto por ID
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
@@ -103,12 +108,12 @@ router.get('/:id', async (req, res) => {
 });
 
 // Ruta para crear un nuevo producto
-router.post("/", async (req, res) => {
+router.post("/", async (req, res) => {n
     const nuevoProducto = req.body;
 
     try {
         await productManager.addProduct(nuevoProducto);
-        res.send({ status: "success", message: "Producto creado correctamente" });
+        res.redirect('/realtimeproducts'); // Redirigir a la página de productos después de crear uno nuevo
     } catch (error) {
         console.log(error);
         res.status(500).send("Error al crear productos");
@@ -154,5 +159,6 @@ router.get('/list', async (req, res) => {
         res.status(500).json({ status: 'error', error: 'Error al obtener productos' });
     }
 });
+
 
 module.exports = router;

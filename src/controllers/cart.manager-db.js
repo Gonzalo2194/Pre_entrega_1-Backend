@@ -1,4 +1,4 @@
-const Cartmodel = require("../models/cart.model.js");
+/*const Cartmodel = require("../models/cart.model.js");
 
 class CartManager {
     async crearCarrito(){
@@ -13,7 +13,7 @@ class CartManager {
     }
     async getCarritoById(cartId){
         try {
-            const carrito = await Cartmodel.findById(cartId);
+            const carrito = await Cartmodel.findById(cartId)
             if(!carrito){
                 console.log("No se encuentra carrito con ese Id");
                 return null;
@@ -44,4 +44,50 @@ class CartManager {
     }
 }
 
-module.exports = CartManager
+module.exports = CartManager*/
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const CartService = require("../services/cart.services.js");
+
+
+const cartService = new CartService();
+
+class CartManager {
+    async crearCarrito(req, res) {
+        try {
+            const nuevoCarrito = await cartService.crearCarrito();
+            res.json(nuevoCarrito);
+        } catch (error) {
+            res.status(500).json({ error: "No se puede crear el carrito" });
+        }
+    }
+
+    async getCarritoById(req, res) {
+        try {
+            const { cartId } = req.params;
+            const carrito = await cartService.getCarritoById(cartId);
+            if (!carrito) {
+                return res.status(404).json({ error: "No se encontró el carrito" });
+            }
+            res.json(carrito); 
+        } catch (error) {
+            res.status(500).json({ error: "Error al obtener el carrito por Id" });
+        }
+    }
+
+    async agregarProductoAlCarrito(req, res) {
+        try {
+            const { cartId, productId, quantity } = req.body;
+            const carrito = await cartService.agregarProductoAlCarrito(cartId, productId, quantity);
+            res.json(carrito);
+        } catch (error) {
+            res.status(500).json({ error: "Error al agregar un producto al carrito" });
+        }
+    }
+}
+
+
+module.exports = CartManager;
+
+

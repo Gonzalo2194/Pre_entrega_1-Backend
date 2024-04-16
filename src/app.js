@@ -1,11 +1,12 @@
 const express = require('express');
 const app = express();
 const PUERTO = 8080;
-require('../src/database.js');
+const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const session = require('express-session');
 const ProductManager = require('./controllers/product.manager-db');
-const CartManager = require('./controllers/cart.manager-db');
+const CartManager = require("./controllers/cart.manager-db.js");
+const cartManager = new CartManager();
 const exphbs = require('express-handlebars');
 const viewsRouter = require('../src/route/views.router.js');
 const productsRouter = require('../src/route/products.router');
@@ -17,7 +18,6 @@ const passport = require('passport'); // Importa el módulo passport
 const LocalStrategy = require('passport-local').Strategy; // Importa la estrategia local de passport
 const initializePassport = require('./config/config.passport.js');
 const sessionRouter = require('../src/route/sessions.router.js');
-
 
 
 
@@ -40,6 +40,7 @@ app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
 // Configuración de express-session
+
 app.use(session({      
     secret: "secretCoder",
     resave: false,
@@ -50,8 +51,21 @@ app.use(session({
     })
 }));
 
+
+const main = async () => {
+    await mongoose.connect("mongodb+srv://gonzalosoto2194:Yanigonza0721@cluster0.rp4awlz.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Cluster0")
+}
+
+main();
+
 ////////////////////////////////
 
+
+
+
+
+
+////////////////////////////////
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -88,7 +102,7 @@ io.on("connection", async (socket) => {
 
     socket.on("agregarProducto", async (producto) => {
         await productManager.addProduct(producto);
-        io.emit("productos", await ProductManager.getProducts());
+        io.emit("productos", await productManager.getProducts());
     });
 });
 
@@ -99,6 +113,7 @@ app.get("/login", (req, res) => {
         res.render("layouts/login");
     }
 });
+
 
 app.get("/usuario", (req, res) => {
     if (req.session.usuario) {
@@ -147,3 +162,4 @@ app.get("/profile", async (req, res) => {
         res.status(500).send('Error interno del servidor');
     }
 });
+

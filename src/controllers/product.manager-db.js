@@ -1,10 +1,10 @@
-const productosModel = require ("../models/products.model.js");
+/*const productosModel = require ("../models/products.model.js");
 
 class ProductManager {
     async addProduct ({title, description,price,img,code,stock,category,status,thumbnail}) {
 
         try {
-        if(!title||!description||!price||!code||!stock||!category||!status) {
+        if(!title||!description||!price||!stock||!category||!status) {
             console.log("Todos los campos son obligatrios");
             return;
         }
@@ -28,6 +28,7 @@ class ProductManager {
             thumbnail: thumbnail ||[],
         });
         await nuevoProducto.save();
+        
 
         } catch (error) {
             console.log("Error al agregar producto",error);
@@ -115,6 +116,130 @@ class ProductManager {
 
         } catch (error) {
             console.log("Error al eliminar producto",error);
+            throw error;
+        }
+    }
+}
+
+module.exports = ProductManager;*/
+
+const productosModel = require("../models/products.model.js");
+
+class ProductManager {
+    async addProduct({ title, description, price, img, code,stock, category, status, thumbnail }) {
+        try {
+            // Verificar si todos los campos obligatorios están presentes
+            if (!title || !description || !price || !stock || !category || !status) {
+                console.log("Todos los campos son obligatorios");
+                return;
+            }
+
+            // Verificar si el código del producto es único
+            const existingProduct = await productosModel.findOne({ code: code });
+            if (existingProduct) {
+                console.log("El código del producto debe ser único");
+                return;
+            }
+
+            // Crear un nuevo producto
+            const newProduct = new productosModel({
+                title,
+                description,
+                price,
+                img,
+                code,
+                stock,
+                category,
+                status: true,
+                thumbnail: thumbnail || [],
+            });
+
+            // Guardar el nuevo producto en la base de datos
+            await newProduct.save();
+            console.log("Producto agregado correctamente");
+        } catch (error) {
+            console.log("Error al agregar producto:", error);
+            throw error;
+        }
+    }
+
+    async getProducts(limit, page, query, sort) {
+        try {
+            let queryObject = {};
+
+            if (query) {
+                queryObject = { $text: { $search: query } };
+            }
+
+            let queryBuilder = productosModel.find(queryObject);
+
+            if (limit !== undefined) {
+                queryBuilder = queryBuilder.limit(limit);
+            }
+
+            if (page !== undefined) {
+                const skip = (page - 1) * (limit || 10);
+                queryBuilder = queryBuilder.skip(skip);
+            }
+
+            let sortObject = {};
+
+            if (sort === 'asc') {
+                sortObject = { price: 1 };
+            } else if (sort === 'desc') {
+                sortObject = { price: -1 };
+            }
+
+            queryBuilder = queryBuilder.sort(sortObject);
+
+            const products = await queryBuilder.exec();
+            return products;
+        } catch (error) {
+            console.log("Error al recuperar productos:", error);
+            throw error;
+        }
+    }
+
+    async getProductById(id) {
+        try {
+            const product = await productosModel.findById(id);
+            if (!product) {
+                console.log("No se encontró el producto");
+                return null;
+            }
+            console.log("Producto encontrado");
+            return product;
+        } catch (error) {
+            console.log("Error al recuperar producto por ID:", error);
+            throw error;
+        }
+    }
+
+    async updateProduct(id, updatedProduct) {
+        try {
+            const product = await productosModel.findByIdAndUpdate(id, updatedProduct);
+            if (!product) {
+                console.log("No se encontró el producto");
+                return null;
+            }
+            console.log("Producto actualizado correctamente");
+            return product;
+        } catch (error) {
+            console.log("Error al actualizar producto:", error);
+            throw error;
+        }
+    }
+
+    async deleteProduct(id) {
+        try {
+            const deletedProduct = await productosModel.findByIdAndDelete(id);
+            if (!deletedProduct) {
+                console.log("No se encontró el producto");
+                return null;
+            }
+            console.log("Producto eliminado correctamente");
+        } catch (error) {
+            console.log("Error al eliminar producto:", error);
             throw error;
         }
     }
