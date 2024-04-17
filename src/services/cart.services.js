@@ -1,4 +1,4 @@
-const CartModel = require("../models/cart.model");
+const CartModel = require("../models/cart.model.js");
 
 class CartService {
     async crearCarrito(products) {
@@ -11,25 +11,6 @@ class CartService {
             throw error;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     async getCarritoById(cartId) {
         try {

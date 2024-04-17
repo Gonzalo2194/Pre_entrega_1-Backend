@@ -48,9 +48,8 @@ module.exports = CartManager*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+const CartModel = require("../models/cart.model.js");
 const CartService = require("../services/cart.services.js");
-
-
 const cartService = new CartService();
 
 class CartManager {
@@ -66,13 +65,16 @@ class CartManager {
 
     async getCarritoById(req, res) {
         try {
-            const { cartId } = req.params;
-            const carrito = await cartService.getCarritoById(cartId);
+            const { cid } = req.params
+            const carrito = await cartService.getCarritoById(cid);
+
             if (!carrito) {
+                
                 return res.status(404).json({ error: "No se encontró el carrito" });
             }
             res.json(carrito); 
         } catch (error) {
+            console.error(error);
             res.status(500).json({ error: "Error al obtener el carrito por Id" });
         }
     }
@@ -89,6 +91,7 @@ class CartManager {
 }
 
 
-module.exports = CartManager;
+module.exports = CartManager
+
 
 

@@ -23,6 +23,7 @@ cartRouter.post("/:cid/product/:pid",cartManager.agregarProductoAlCarrito);
 
 
 
+
 // Ruta para actualizar carrito por id y traer productos
 cartRouter.post("/:cid/product/:pid", async (req, res) => {
     const cartId = req.params.cid;
