@@ -18,14 +18,12 @@ const cartManager = new CartManager
 
 cartRouter.post("/", cartManager.crearCarrito);
 cartRouter.get("/:cid", cartManager.getCarritoById);
-cartRouter.post("/:cid/product/:pid",cartManager.agregarProductoAlCarrito);
-
-
-
+//cartRouter.post("/:cid/product/:pid",cartManager.agregarProductoAlCarrito);
+cartRouter.post("/:cartId/product/:productId", cartManager.agregarProductoAlCarrito);
 
 
 // Ruta para actualizar carrito por id y traer productos
-cartRouter.post("/:cid/product/:pid", async (req, res) => {
+/*cartRouter.post("/:cid/product/:pid", async (req, res) => {
     const cartId = req.params.cid;
     const productId = req.params.pid;
     const quantity = req.body.quantity || 1;
@@ -38,7 +36,7 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
         console.error("Error al guardar producto en carrito");
         res.status(500).json({error:"Error al interno del servidor"});
     }
-});
+});*/
 
 module.exports = cartRouter;
 

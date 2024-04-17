@@ -79,19 +79,37 @@ class CartManager {
         }
     }
 
-    async agregarProductoAlCarrito(req, res) {
+   /* async agregarProductoAlCarrito(req, res) {
         try {
-            const { cartId, productId, quantity } = req.body;
+            const {cartId, productId, quantity } = req.params;
             const carrito = await cartService.agregarProductoAlCarrito(cartId, productId, quantity);
             res.json(carrito);
         } catch (error) {
-            res.status(500).json({ error: "Error al agregar un producto al carrito" });
+            res.status(500).json({ error: "Error al agregar un producto al carrito perro" });
         }
     }
-}
+};*/
 
 
-module.exports = CartManager
+async agregarProductoAlCarrito(req, res) {
+    try {
+        const { cartId, productId } = req.params;
+        const { quantity } = req.body; // Asegúrate de que el cuerpo de la solicitud tenga un campo 'quantity'
 
+        // Verificar si 'cartId' y 'productId' están definidos y tienen valores válidos
+        if (!cartId || !productId || isNaN(quantity)) {
+            return res.status(400).json({ error: "Parámetros de solicitud incorrectos" });
+        }
+
+        // Llama al servicio para agregar el producto al carrito
+        const carrito = await cartService.agregarProductoAlCarrito(cartId, productId, quantity);
+        res.json(carrito);
+    } catch (error) {
+        res.status(500).json({ error: "Error al agregar un producto al carrito" });
+    }
+}}
+
+
+module.exports = CartManager;
 
 
