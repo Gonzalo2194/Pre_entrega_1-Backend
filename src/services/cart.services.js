@@ -12,9 +12,17 @@ class CartService {
         }
     }
 
-    async getCarritoById(cartId) {
-        try {
-            const carrito = await CartModel.findById(cartId);
+    //async getCarritoById(cartId) {
+        async getCarritoById(cartId) {
+            try {
+            const carrito = await CartModel.findById(cartId).populate({
+                path: 'products.product', // Nombre del campo de referencia en el esquema del carrito
+                select: 'title' // Campos que deseas mostrar del producto (en este caso, solo el título)
+            });
+        
+        
+        /*try {
+            const carrito = await CartModel.findById(cartId);*/
             
             if (!carrito) {
                 console.log("No se encuentra carrito con ese Id");
@@ -26,29 +34,6 @@ class CartService {
             throw error;
         }
     }
-
-    /*async agregarProductoAlCarrito(cartId, productId, quantity = 1) {
-        try {
-        console.log("cartId:", cartId);
-        console.log("productId:", productId);
-        console.log("quantity:", quantity);
-        
-        const carrito = await this.getCarritoById(cartId);
-        const existeProducto = carrito.products.find(item => item.product.toString() === productId);
-
-            if (existeProducto) {
-                existeProducto.quantity += quantity;
-            } else {
-                carrito.products.push({ product: productId, quantity });
-            }
-            carrito.markModified("products");
-            await carrito.save();
-            return carrito;
-        } catch (error) {
-            console.log("Error al agregar un producto nutria", error);
-            throw error;
-        }
-    }*/
 
     async agregarProductoAlCarrito(cartId, productId, quantity = 1) {
         try {
