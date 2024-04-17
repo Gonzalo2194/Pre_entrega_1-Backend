@@ -6,17 +6,17 @@ const cartManager = new CartManager
 
 //Ruta para crear carrito
 
-cartRouter.post("/", async (req, res) => {
+/*cartRouter.post("/", async (req, res) => {
     try {
         const response = await cartManager.crearCarrito();
         res.json(response);
     } catch (error) {
         res.send("Error al crear carrito");
     }
-});
+});*/
 
 
-
+cartRouter.post("/", cartManager.crearCarrito);
 cartRouter.get("/:cid", cartManager.getCarritoById);
 cartRouter.post("/:cid/product/:pid",cartManager.agregarProductoAlCarrito);
 

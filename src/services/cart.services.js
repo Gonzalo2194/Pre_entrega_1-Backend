@@ -1,16 +1,35 @@
 const CartModel = require("../models/cart.model");
 
 class CartService {
-    async crearCarrito() {
+    async crearCarrito(products) {
         try {
-            const nuevoCarrito = new CartModel({ products: [] });
-            await nuevoCarrito.save();
-            return nuevoCarrito;
+            const nuevoCarrito = new CartModel(products);
+            return await nuevoCarrito.save();
         } catch (error) {
+            console.error(error);
             console.log("Error al crear carrito nuevo");
             throw error;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     async getCarritoById(cartId) {
         try {

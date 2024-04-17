@@ -56,9 +56,10 @@ const cartService = new CartService();
 class CartManager {
     async crearCarrito(req, res) {
         try {
-            const nuevoCarrito = await cartService.crearCarrito();
+            const nuevoCarrito = await cartService.crearCarrito(req.body);
             res.json(nuevoCarrito);
         } catch (error) {
+            console.error(error);
             res.status(500).json({ error: "No se puede crear el carrito" });
         }
     }
