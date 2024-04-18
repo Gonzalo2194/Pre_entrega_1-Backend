@@ -170,11 +170,17 @@ class ProductManager {
         this.productService = new ProductService();
     }
 
-    async addProduct(productData) {
+    async addProduct(req,res) {
         try {
-            const newProduct = await this.productService.addProduct(productData);
+            const { title, description, price, img, code, stock, category, status, thumbnail } = req.body;
+            const productData = { title, description, price, img, code, stock, category, status, thumbnail };
+    
+            const newProduct = await productService.addProduct(productData);
+            res.json(newProduct);
             return newProduct;
         } catch (error) {
+            console.log("Error al agregar producto:", error); // Se agrega un mensaje de error para la consola
+            res.status(500).json({ error: "Error al agregar producto" }); // Se envía una respuesta JSON con el error
             throw error;
         }
     };
@@ -233,13 +239,17 @@ class ProductManager {
             return res.status(500).json({ error: `Error al obtener producto por ID` });
         };
     };
-    async updateProductById(id, updatedProductData) {
+    async updateProductById(req,res) {
         try {
-            const product = await this.productService.updateProductById(id, updatedProductData);
+            const { id } = req.params;
+            const updatedProductData = req.body; // Se corrige aquí para obtener los datos del cuerpo de la solicitud
+    
+            const product = await productService.updateProductById(id, updatedProductData);
             if (!product) {
                 console.log("No se encontró el producto");
-                return null;
+                return res.status(404).json({ error: "No se encontró el producto" }); // Se envía una respuesta JSON en caso de no encontrar el producto
             }
+            res.json({ message: "Producto actualizado correctamente" }); // Se envía una respuesta JSON con el mensaje de éxito
             console.log("Producto actualizado correctamente");
             return product;
         } catch (error) {
