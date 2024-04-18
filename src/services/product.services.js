@@ -1,4 +1,6 @@
 const productosModel = require("../models/products.model");
+const ProductManager = require("../controllers/product.manager-db")
+
 
 class ProductService {
 
@@ -37,7 +39,7 @@ class ProductService {
             console.error("Error al recuperar productos:", error);
             throw error;
         }
-    }
+    };
 
         async addProduct(productData) {
         try {
@@ -47,7 +49,46 @@ class ProductService {
         } catch (error) {
             throw new Error("Error al agregar producto: " + error.message);
         }
-    }
+    };
+
+    async getProductById(id) {
+        try {
+            const product = await productosModel.findById(id);
+            if (!product) {
+                console.log("No se encontró el producto");
+                return null;
+            }
+            console.log("Producto encontrado");
+            return product;
+        } catch (error) {
+            console.log("Error al recuperar producto por ID:", error);
+            throw error;
+        }
+    };
+
+    async updateProductById(id, updatedProductData) {
+        try {
+            const product = await productosModel.findByIdAndUpdate(id, updatedProductData);
+            if (!product) {
+                console.log("No se encontró el producto");
+                return null;
+            }
+            console.log("Producto actualizado correctamente");
+            return product;
+        } catch (error) {
+            console.log("Error al actualizar producto:", error);
+            throw error;
+        }
+    };
+
+        async deleteProduct(id) {
+            try {
+                const deletedProduct = await productosModel.findByIdAndDelete(id);
+                return deletedProduct;
+            } catch (error) {
+                throw error;
+            }
+        }
 }
 
 module.exports = ProductService;

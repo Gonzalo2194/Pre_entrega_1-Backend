@@ -4,53 +4,40 @@ const express = require('express');
 const router = express.Router();
 const ProductManager =require("../controllers/product.manager-db")
 const productManager = new ProductManager();
-const productosModel = require("../models/products.model");
 
 
-//getproduct
-//router.get("/", productManager.getProducts)
 
 // Obtener productos
 router.get("/products", productManager.getProducts);
-
-
 // Ruta para obtener un producto por ID
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
+router.get("/:id", productManager.getProductById);
+//ruta para eliminar producto:
+router.delete("/:id", productManager.deleteProduct);
 
+
+
+//Ruta para actualizar un producto por ID
+router.put("/:id", async (req, res) => {
     try {
-        const product = await productManager.getProductById(id);
+        const { id } = req.params;
+        const updatedProductData = req.body; // Suponemos que los datos actualizados están en el cuerpo de la solicitud
 
-        if (product) {
-            return res.json(product);
-        } else {
+        const updatedProduct = await productManager.updateProductById(id, updatedProductData);
+
+        if (!updatedProduct) {
             return res.status(404).json({ error: `Producto con ID ${id} no encontrado` });
         }
+
+        res.json(updatedProduct);
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: `Error al obtener producto con ID: ${id}` });
-    }
-});
+        console.error("Error al actualizar producto:", error);
+        res.status(500).json({ error: "Error al actualizar producto" });
+    }});
 
 
-
-
-// Ruta para actualizar un producto por ID
-router.put("/:id", async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        const { title, description, price, thumbnail, code, stock, status = true, category } = req.body;
-        const response = await productManager.updatedProduct(id, { title, description, price, thumbnail, code, stock, status, category });
-        res.json(response);
-    } catch (error) {
-        console.log(error);
-        res.status(500).send(`Error al actualizar producto con ID: ${id}`);
-    }
-});
 
 // Ruta para eliminar un producto por ID
-router.delete("/:id", async (req, res) => {
+/*router.delete("/:id", async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -60,7 +47,7 @@ router.delete("/:id", async (req, res) => {
         console.log(error);
         res.status(500).send(`Error al eliminar producto con ID: ${id}`);
     }
-});
+});*/
 
 // Para obtener la lista de productos con paginación
 router.get('/list', async (req, res) => {

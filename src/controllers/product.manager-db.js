@@ -163,6 +163,7 @@ module.exports = ProductManager;*/
 //nuevo addproduct:
 const ProductService = require ("../services/product.services.js");
 const productosModel = require("../models/products.model.js");
+const productService = new ProductService();
 
 class ProductManager {
     constructor() {
@@ -214,26 +215,27 @@ class ProductManager {
             console.log("Error al recuperar productos:", error);
             throw error;
         }
-    }
+    };
 
-    async getProductById(id) {
+    async getProductById(req, res) {
         try {
-            const product = await productosModel.findById(id);
-            if (!product) {
-                console.log("No se encontró el producto");
-                return null;
+            const { id } = req.params;
+
+            const product = await productService.getProductById(id);
+
+            if (product) {
+                return res.json(product);
+            } else {
+                return res.status(404).json({ error: `Producto con ID ${id} no encontrado` });
             }
-            console.log("Producto encontrado");
-            return product;
         } catch (error) {
-            console.log("Error al recuperar producto por ID:", error);
-            throw error;
-        }
-    }
-
-    async updateProduct(id, updatedProduct) {
+            console.error("Error al obtener producto por ID:", error);
+            return res.status(500).json({ error: `Error al obtener producto por ID` });
+        };
+    };
+    async updateProductById(id, updatedProductData) {
         try {
-            const product = await productosModel.findByIdAndUpdate(id, updatedProduct);
+            const product = await this.productService.updateProductById(id, updatedProductData);
             if (!product) {
                 console.log("No se encontró el producto");
                 return null;
@@ -244,21 +246,23 @@ class ProductManager {
             console.log("Error al actualizar producto:", error);
             throw error;
         }
-    }
+    };
+    
+    async deleteProduct(req, res) {
 
-    async deleteProduct(id) {
         try {
-            const deletedProduct = await productosModel.findByIdAndDelete(id);
-            if (!deletedProduct) {
-                console.log("No se encontró el producto");
-                return null;
+            const { id } = req.params;
+            const deletedProduct = await productService.deleteProduct(id);
+            if (deletedProduct) {
+                res.json({ message: "Producto eliminado correctamente" });
+            } else {
+                res.status(404).json({ error: `Producto con ID ${id} no encontrado` });
             }
-            console.log("Producto eliminado correctamente");
         } catch (error) {
-            console.log("Error al eliminar producto:", error);
-            throw error;
-        }
-    }
+            console.error("Error al eliminar producto:", error);
+            res.status(500).json({ error: "Error al eliminar producto por ID" });
+        }}
+
 }
 
 module.exports = ProductManager;
