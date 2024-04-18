@@ -123,10 +123,7 @@ class ProductManager {
 
 module.exports = ProductManager;*/
 
-const productosModel = require("../models/products.model.js");
-
-class ProductManager {
-    async addProduct({ title, description, price, img, code,stock, category, status, thumbnail }) {
+    /*async addProduct({ title, description, price, img, code,stock, category, status, thumbnail }) {
         try {
             // Verificar si todos los campos obligatorios están presentes
             if (!title || !description || !price || !stock || !category || !status) {
@@ -161,8 +158,27 @@ class ProductManager {
             console.log("Error al agregar producto:", error);
             throw error;
         }
+    }*/
+
+//nuevo addproduct:
+const ProductService = require ("../services/product.services.js");
+const productosModel = require("../models/products.model.js");
+
+class ProductManager {
+    constructor() {
+        this.productService = new ProductService();
     }
 
+    async addProduct(productData) {
+        try {
+            const newProduct = await this.productService.addProduct(productData);
+            return newProduct;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+//nuevo getProducts:
     async getProducts(limit, page, query, sort) {
         try {
             let queryObject = {};
