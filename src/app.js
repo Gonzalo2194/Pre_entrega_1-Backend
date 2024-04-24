@@ -47,7 +47,7 @@ app.use(session({
     saveUninitialized: false,
     store: MongoStore.create({
         mongoUrl: "mongodb+srv://gonzalosoto2194:Yanigonza0721@cluster0.rp4awlz.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Cluster0",
-        ttl: 1000
+        ttl: 800
     })
 }));
 

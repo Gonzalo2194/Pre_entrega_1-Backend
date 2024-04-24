@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const router = express.Router();
 const UserModel = require("../models/user.model")
 const {isValidPassword} = require('../utils/hashbcrypt.js');
@@ -60,6 +60,24 @@ router.get("/githubcalback", passport.authenticate("github",{failureRedirect:"/l
 });
 
 
-
     
+module.exports = router;*/
+
+
+const express = require("express");
+const router = express.Router();
+const passport = require("passport");
+const SessionController = require("../controllers/session.controller");
+
+const sessionController = new SessionController();
+
+router.post("/login", sessionController.login);
+router.get("/faillogin", sessionController.failLogin);
+router.get("/logout", sessionController.logout);
+router.get("/github", passport.authenticate("github", { scope: ["user:email"] }), sessionController.githubLogin);
+router.get("/githubcalback", passport.authenticate("github", { failureRedirect: "/login" }), sessionController.githubCallback);
+
+
 module.exports = router;
+
+

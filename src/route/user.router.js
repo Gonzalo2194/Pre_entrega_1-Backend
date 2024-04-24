@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const router = express.Router();
 const UserModel = require("../models/user.model.js");
 const {createHash} = require("../utils/hashbcrypt.js");
@@ -27,6 +27,23 @@ router.post('/', passport.authenticate('register', { failureRedirect: '/login' }
         res.status(500).send({ status: 'error', message: 'Error interno del servidor' });
     }
 });
+
+
+module.exports = router;*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const express = require('express');
+const router = express.Router();
+const UserController = require('../controllers/user.controller');
+const userController = new UserController();
+
+
+// Ruta para registrar un nuevo usuario
+router.post('/', userController.register);
+
+
+
 
 
 module.exports = router;
