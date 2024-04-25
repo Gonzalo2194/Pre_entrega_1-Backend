@@ -44,23 +44,21 @@ class SessionController {
     }
 
     async githubLogin(req, res) {
-        // Handle GitHub login logic
+
         res.redirect('/auth/github');
     }
-
+    
     async githubCallback(req, res) {
-        // Handle GitHub callback logic
-        passport.authenticate('github', { failureRedirect: '/login' })(req, res, (err) => {
-            if (err) {
-                // Manejar errores de autenticación de GitHub
-                return res.redirect('/login');
-            }
-            // La autenticación de GitHub fue exitosa
-            req.session.user = req.user;
-            req.session.login = true;
-            res.redirect("/profile");
-        });
-    }
-}
+            try {
+                req.session.user = req.user;
+                req.session.login = true;
+                res.redirect("/profile")
+
+            } catch (error) {
+                console.error('Error al autenticar en githubCallback:', error);
+            res.redirect("/login");
+            }}
+        };
+
 
 module.exports = SessionController;

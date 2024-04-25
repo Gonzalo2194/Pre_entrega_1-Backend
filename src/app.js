@@ -3,6 +3,9 @@ const app = express();
 const PUERTO = 8080;
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
+const passport = require('passport'); // Importa el módulo passport
+const LocalStrategy = require('passport-local').Strategy; // Importa la estrategia local de passport
+const initializePassport = require('./config/config.passport.js');
 const session = require('express-session');
 const ProductManager = require('./controllers/product.manager-db');
 const CartManager = require("./controllers/cart.manager-db.js");
@@ -14,9 +17,6 @@ const cartRouter = require('../src/route/cart.router');
 const socket = require('socket.io');
 const userRouter = require('../src/route/user.router.js');
 const UserModel = require('./models/user.model.js');
-const passport = require('passport'); // Importa el módulo passport
-const LocalStrategy = require('passport-local').Strategy; // Importa la estrategia local de passport
-const initializePassport = require('./config/config.passport.js');
 const sessionRouter = require('../src/route/sessions.router.js');
 
 

@@ -74,7 +74,8 @@ const sessionController = new SessionController();
 router.post("/login", sessionController.login);
 router.get("/faillogin", sessionController.failLogin);
 router.get("/logout", sessionController.logout);
-router.get("/github", passport.authenticate("github", { scope: ["user:email"] }), sessionController.githubLogin);
+
+router.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
 router.get("/githubcalback", passport.authenticate("github", { failureRedirect: "/login" }), sessionController.githubCallback);
 
 
