@@ -14,7 +14,7 @@ class SessionController {
                 if (!user) {
                     return res.status(400).send({ status: "error" });
                 }
-                // Assuming isValidPassword is defined somewhere
+
                 if (!isValidPassword(req.body.password, user)) {
                     return res.status(400).send({ status: "error", message: "Contraseña incorrecta" });
                 }
