@@ -83,7 +83,7 @@ passport.use("github", new GitHubStrategy({
             let newUser = {
                 first_name: profile._json.name,
                 last_name: "",
-                age:22,
+                age:profile._json.age || null,
                 email: profile._json.email,
                 password:"secret"
             }
