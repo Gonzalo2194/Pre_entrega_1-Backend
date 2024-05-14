@@ -51,6 +51,7 @@ module.exports = CartManager*/
 const CartModel = require("../models/cart.model.js");
 const CartService = require("../services/cart.services.js");
 const cartService = new CartService();
+const mongoose = require('mongoose');
 
 class CartManager {
     async crearCarrito(req, res) {
@@ -85,7 +86,7 @@ async agregarProductoAlCarrito(req, res) {
         const { cartId, productId } = req.params;
         const { quantity } = req.body; 
 
-        // Verificar si 'cartId' y 'productId' están definidos y tienen valores válidos
+        // Verificar si 'cartId', 'productId' y 'quantity' están definidos y tienen valores válidos
         if (!cartId || !productId || isNaN(quantity)) {
             return res.status(400).json({ error: "Parámetros de solicitud incorrectos" });
         }
@@ -94,11 +95,14 @@ async agregarProductoAlCarrito(req, res) {
         const carrito = await cartService.agregarProductoAlCarrito(cartId, productId, quantity);
         res.json(carrito);
     } catch (error) {
+        console.error("Error al agregar un producto al carrito:", error);
         res.status(500).json({ error: "Error al agregar un producto al carrito" });
-    }
-}}
+    }};
 
+
+}
 
 module.exports = CartManager;
+
 
 

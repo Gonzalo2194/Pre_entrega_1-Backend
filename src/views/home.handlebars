@@ -1,12 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Estilos generales -->
+    <link rel="stylesheet" href="/css/productList.css"> <!-- Estilos específicos para productList -->
+</head>
 
     <header>
         <nav>
             <ul>
                 <li><a href="/login">Iniciar sesión</a></li>
+                <li><a href="/profile">Mi Perfil</a></li>
                 <li><a href="/register">Registrarse</a></li>
+                <li><a href="/api/carts/{{cartId}}">Carrito </a></li>
                 <li><a href="/products">Listado de Productos</a></li>
+                <li><a href="/api/sessions/logout">Logout</a></li>
             </ul>
         </nav>
+    </header>
         
 <h1 class="mt-5">Home:</h1>
         <div class="container mt-3">
@@ -18,12 +31,16 @@
                             <div class="card-body"> 
                                 <h5 class="card-title">{{this.title}}</h5>
                                 <p class="card-text">{{this.description}}</p>
+                                <p class="card-text">Disponibles: {{this.stock}}</p>
                                 <p class="card-text">Precio: {{this.price}}</p>
                             </div>
-                        <form action="/:cartId/product/:productId" method="post">
-                            <input type="hidden" name="productId" value="{{_id}}">
-                            <button type="submit">Agregar al carrito</button>
-                        </form>
+                    </form> 
+                    <form action="/api/carts/{{../cartId}}/product/{{#if this._id}}{{this._id}}{{/if}}" method="post">
+                        <input type="hidden" name="productId" value="{{this._id}}">
+                        <input type="number" name="quantity" value="1"> 
+                        <button type="submit">Agregar al carrito</button>
+                    </form> 
+                        
                     </div>
                 </div>
             {{/each}}
@@ -38,5 +55,6 @@
                 <a href="{{nextLink}}">Next</a>
             {{/if}}
         </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
-<script src="js/main.js"></script>
+
+
+

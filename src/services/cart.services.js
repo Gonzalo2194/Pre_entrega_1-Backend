@@ -1,4 +1,5 @@
 const CartModel = require("../models/cart.model.js");
+const mongoose = require('mongoose');
 
 class CartService {
     async crearCarrito(cartData) {
@@ -30,8 +31,8 @@ class CartService {
             }
             return carrito;
         } catch (error) {
-            console.log("Error al obtener carrito por Id");
-            throw error;
+            console.log("Error al obtener carrito por Id:", error);
+        throw error; // Lanza el error para que sea capturado por el middleware de errores de Express
         }
     }
 
@@ -39,13 +40,18 @@ class CartService {
         try {
 
             const carrito = await CartModel.findById(cartId);
-            console.log(cartId);
+            
+            let existeProducto = null;
+            
             if (!carrito) {
-                throw new Error("No se encontró el carrito");
-            }
-
-            const existeProducto = carrito.products.find(item => item.product.toString() === productId);
+                const nuevoCarrito = new CartModel({ products: [{ product: productId, quantity }] });
+                return await nuevoCarrito.save();
+                
+            }else{
+                const existeProducto = carrito.products.find(item => item.product.toString() === productId);}
+            
             if (existeProducto) {
+
                 existeProducto.quantity += quantity;
             } else {
                 carrito.products.push({ product: productId, quantity });
@@ -55,11 +61,9 @@ class CartService {
             await carrito.save();
             return carrito;
         } catch (error) {
-            console.log("Error al agregar un producto al carrito:", error);
+            console.log("Error al agregar un producto al carrito :", error);
             throw error;
-        }
-    }
-
+        }}
 };
 
 

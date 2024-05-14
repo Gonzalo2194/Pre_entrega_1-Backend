@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Estilos generales -->
+    <link rel="stylesheet" href="/css/cart.css"> <!-- Estilos específicos para el carrito -->
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/login">Iniciar sesión</a></li>
+                <li><a href="/profile">Mi Perfil</a></li>
+                <li><a href="/register">Registrarse</a></li>
+                <li><a href="/api/carts/{{cartId}}">Carrito </a></li>
+                <li><a href="/products">Listado de Productos</a></li>
+                <li><a href="/api/sessions/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <h1 class="mt-5">Carrito de Compras:</h1>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Precio Unitario</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each cart.products}}
+                        <tr>
+                            <td>{{this.product.title}}</td>
+                            <td>{{this.quantity}}</td>
+                            <td>{{this.product.price}}</td>
+                            <td>{{this.product.price this.quantity}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <h3>Total: {{cart.total}}</h3>
+                    <a href="/checkout" class="btn btn-primary">Proceder al Pago</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

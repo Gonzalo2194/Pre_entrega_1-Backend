@@ -27,10 +27,11 @@
                                 <p class="card-text">Precio: {{this.price}}</p>
                             {{/if}}
                         </div>
-                        <form action="/add-to-cart" method="post">
+                        <form action="/api/carts/{{../cartId}}/product/{{#if this._id}}{{this._id}}{{/if}}" method="post">
                             <input type="hidden" name="productId" value="{{this._id}}">
-                            <button type="submit">Agregar al carrito</button>
-                        </form>
+                            <input type="number" name="quantity" value="1"> 
+                        <button type="submit">Agregar al carrito</button>
+                    </form> 
                     </div>
                 </div>
             {{/each}}
