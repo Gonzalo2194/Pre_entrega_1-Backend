@@ -1,5 +1,5 @@
 const productosModel = require("../models/products.model");
-const ProductManager = require("../controllers/product.manager-db")
+
 
 
 class ProductService {

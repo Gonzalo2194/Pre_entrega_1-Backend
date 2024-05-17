@@ -18,7 +18,7 @@ const socket = require('socket.io');
 const userRouter = require('../src/route/user.router.js');
 const UserModel = require('./models/user.model.js');
 const sessionRouter = require('../src/route/sessions.router.js');
-
+const productManager = new ProductManager();
 
 
 
@@ -80,11 +80,13 @@ app.use("/api/users", userRouter); // Ruta login
 
 
 
+
+
 const httpServer = app.listen(PUERTO, () => {
     console.log(`Escuchando desde ${PUERTO}`);
 });
 
-const productManager = new ProductManager();
+
 const io = socket(httpServer);
 
 io.on("connection", async (socket) => {

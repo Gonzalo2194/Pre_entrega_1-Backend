@@ -19,9 +19,9 @@ vrouter.get('/', async (req, res) => {
             cartId = nuevoCarrito._id;
             req.session.cartId = cartId;}
 
-
         res.render("home", { 
             products: products.map(product => ({
+                img:product.img,
                 title: product.title,
                 description: product.description,
                 price: product.price,
@@ -57,11 +57,11 @@ vrouter.get('/productlist', async (req, res) => {
         const products = await productManager.getProducts(limit, page, query, sort, category, availability);
         
 
-        // Verifica si req.session está definido y si tiene la propiedad usuario
+         // Verifica si req.session está definido y si tiene la propiedad usuario
         const currentUser = req.session && req.session.usuario ? await UserModel.findOne({ email: req.session.usuario }) : null;
         console.log(currentUser);
         
-        // Renderiza la vista con la lista de productos
+         // Renderiza la vista con la lista de productos
         return res.render('layouts/productlist', { products, user: currentUser });
     } catch (error) {
         console.error('Error al obtener la lista de productos', error);
@@ -72,9 +72,9 @@ vrouter.get('/productlist', async (req, res) => {
 
 vrouter.get('/api/carts', async (req, res) => {
     try {
-        
-        const products = await CartModel.find(); // Ejemplo, obtiene todos los productos del carrito
-
+        const cartId = req.params.cartId;
+        //const products = await CartModel.find(); // Ejemplo, obtiene todos los productos del carrito
+        const products = await CartModel.find({ cartId: cartId });
         res.render('layouts/carts', { products }); // Renderiza la plantilla cart.handlebars con los productos
     } catch (error) {
         console.error('Error al obtener productos del carrito:', error);
