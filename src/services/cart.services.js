@@ -12,18 +12,12 @@ class CartService {
             throw error;
         }
     }
-
-    //async getCarritoById(cartId) {
         async getCarritoById(cartId) {
             try {
             const carrito = await CartModel.findById(cartId).populate({
                 path: 'products.product', // Nombre del campo de referencia en el esquema del carrito
                 select: 'title' // Campos que deseas mostrar del producto (en este caso, solo el título)
             });
-        
-        
-        /*try {
-            const carrito = await CartModel.findById(cartId);*/
             
             if (!carrito) {
                 console.log("No se encuentra carrito con ese Id");

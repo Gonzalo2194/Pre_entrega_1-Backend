@@ -1,16 +1,66 @@
-<h1 class="text-center">Carrito de Compras</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
 
-<li><a href="/">Home</a></li>
-<div class="container">
-    {{#each productos}}
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Producto: {{this.product.title}}</h5>
-            <p class="card-text">Cantidad: {{this.quantity}}</p>
-            <p class="card-text">Precio: ${{this.product.totalPrice}}</p>
-            <button onclick="eliminarProducto('{{this.cartId}}', '{{this.product._id}}')"
-                class="btn btn-danger">Eliminar</button>
+<header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <ul class="nav nav-pills ms-auto mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"  type="button" role="tab" aria-controls="pills-home" aria-selected="true" href="/">Home</a>
+                    </li>
+
+                    <li class="nav-item hover" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/profile" aria-selected="false">Mi perfil</a>
+                    </li>
+
+                    <li class="nav-item hover" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/productlist" aria-selected="false">Productos</a>
+                    </li>
+
+                    <li class="nav-item hover" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/api/sessions/logout" aria-selected="false">Cerrar sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </nav> 
+    </header>
+<body>
+    <h1 class="mt-5">Carrito de Compras:</h1>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Precio Unitario</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each cart.products}}
+                        <tr>
+                            <td>{{this.product.title}}</td>
+                            <td>{{this.quantity}}</td>
+                            <td>{{this.product.price}}</td>
+                            <td>{{multiply this.product.price this.quantity}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <h3>Total: {{cart.total}}</h3>
+                    <a href="/checkout" class="btn btn-primary">Proceder al Pago</a>
+                </div>
+            </div>
         </div>
     </div>
-    {{/each}}
-</div>
+</body>
+</html>

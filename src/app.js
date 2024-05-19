@@ -24,12 +24,17 @@ const productManager = new ProductManager();
 
 
 // Configuración de Handlebars
+
+
 const hbs = exphbs.create({
     defaultLayout: 'main',
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true,
     },
+    helpers: {
+        multiply: (a, b) => a * b
+    }
 });
 
 app.engine('handlebars', hbs.engine);

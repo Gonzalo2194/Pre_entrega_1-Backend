@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/styles.css"> <!-- Estilos generales -->
     <link rel="stylesheet" href="/css/productList.css"> <!-- Estilos específicos para productList -->
 </head>
-        <header>
+<header>
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
                 <ul class="nav nav-pills ms-auto mb-3" id="pills-tab" role="tablist">
@@ -32,7 +32,7 @@
                     </li>
 
                     <li class="nav-item hover" role="presentation">
-                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/api/carts"aria-selected="false">Mi carrito</a>
+                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/api/cart/{{cartId}}"aria-selected="false">Mi carrito</a>
                     </li>
 
                     <li class="nav-item hover" role="presentation">
@@ -42,7 +42,6 @@
             </div>
         </nav> 
     </header>
-
 <h1 class="mt-5">Home</h1>
         <div class="container mt-3">
             <div class="row">

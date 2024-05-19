@@ -8,6 +8,7 @@ const CartService = require("../services/cart.services.js");
 const cartService = new CartService();
 
 
+
 //ruta carrito
 vrouter.get('/', async (req, res) => {
     try {
@@ -50,42 +51,63 @@ vrouter.get('/realtimeproducts', async (req, res) => {
     }
 });
 
+
 vrouter.get('/productlist', async (req, res) => {
     try {
-        
-        const { limit, page, sort, category, availability, query } = req.query;
-        const products = await productManager.getProducts(limit, page, query, sort, category, availability);
-        
+        const products = await productManager.getProducts();
+        let cartId = req.session.cartId
 
-         // Verifica si req.session está definido y si tiene la propiedad usuario
-        const currentUser = req.session && req.session.usuario ? await UserModel.findOne({ email: req.session.usuario }) : null;
-        console.log(currentUser);
-        
-         // Renderiza la vista con la lista de productos
-        return res.render('layouts/productlist', { products, user: currentUser });
+            if(!cartId){
+                const nuevoCarrito = await cartService.crearCarrito({ products: [] });
+            cartId = nuevoCarrito._id;
+            req.session.cartId = cartId;}
+
+        res.render("layouts/productlist", { 
+            products: products.map(product => ({
+                img:product.img,
+                title: product.title,
+                description: product.description,
+                price: product.price,
+                stock: product.stock,
+                _id:product.id,
+                
+            })),
+            cartId: cartId
+
+        });
     } catch (error) {
-        console.error('Error al obtener la lista de productos', error);
-        res.status(500).json({ status: 'error', error: 'Error al obtener productos' });
-    }
+        console.log("Error al obtener productos", error);
+        res.status(500).json({ error: "Error interno del servidor" });
 
+    }
 });
 
-vrouter.get('/api/carts', async (req, res) => {
+
+vrouter.get('/api/cart/:cid', async (req, res) => {
     try {
-        const cartId = req.params.cartId;
-        //const products = await CartModel.find(); // Ejemplo, obtiene todos los productos del carrito
-        const products = await CartModel.find({ cartId: cartId });
-        res.render('layouts/carts', { products }); // Renderiza la plantilla cart.handlebars con los productos
+        const cartId = req.params.cid; // Obtener el ID del carrito de los parámetros de la URL
+        const carrito = await CartModel.findById(cartId).populate('products.product');
+        
+        if (!carrito) {
+            return res.status(404).render('error', { message: "No se encontró el carrito" });
+        }
+
+        let total = 0;
+        carrito.products.forEach(item => {
+            total += item.product.price * item.quantity;
+        });
+
+        res.render('layouts/cart', {
+            cart: {
+                products: carrito.products,
+                total: total
+            }
+        });
     } catch (error) {
         console.error('Error al obtener productos del carrito:', error);
-        res.status(500).send('Error interno del servidor');
+        res.status(500).render('error', { message: "Error interno del servidor" });
     }
 });
-
-
-
-
-
 
 module.exports = vrouter;
 

@@ -40,7 +40,7 @@ class SessionController {
         if (req.session.login) {
             req.session.destroy();
         }
-        res.redirect("/login");
+        res.redirect("/login",);
     }
 
     async githubLogin(req, res) {
@@ -58,6 +58,7 @@ class SessionController {
                 console.error('Error al autenticar en githubCallback:', error);
             res.redirect("/login");
             }}
+            
         };
 
 

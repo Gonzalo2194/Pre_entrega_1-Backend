@@ -27,6 +27,7 @@ const renderProductos = (productos) => {
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-danger" onclick="eliminarProducto('${item._id}')">Eliminar</button>
+                    
                 </div>
             </div>
         `;

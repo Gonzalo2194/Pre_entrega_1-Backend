@@ -5,22 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/src/public/css/style.profile.css">
 </head>
-<body>
-    
-</body>
+<header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <ul class="nav nav-pills ms-auto mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"  type="button" role="tab" aria-controls="pills-home" aria-selected="true" href="/">Home</a>
+                    </li>
+
+                    <li class="nav-item hover" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/productlist" aria-selected="false">Productos</a>
+                    </li>
+
+                    <li class="nav-item hover" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/api/cart/{{cartId}}"aria-selected="false">Mi carrito</a>
+                    </li>
+
+                    <li class="nav-item hover" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/api/sessions/logout" aria-selected="false">Cerrar sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </nav> 
+    </header>
 </html>
 </head>
 <body>
-    <div class="card">
+    <div class=>
         <h1>Mi perfil</h1>
         <p>Bienvenido, {{user.first_name}}.</p>
         <p>E-mail: {{user.email}}</p>
         <p>Edad: {{user.age}}</p>
 
-        <a href="/api/sessions/logout">Logout</a>
-        <a href="/">Home</a>
-        <a href="api/carts"{{cartId}}>Carrito</a>
-    </div>
+        </thead>
+                    <tbody>
+                        {{#each cart.products}}
+                        <tr>
+                            <td>{{this.product.title}}</td>
+                            <td>{{this.quantity}}</td>
+                            <td>{{this.product.price}}</td>
+                            <td>{{multiply this.product.price this.quantity}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
 </body>
 </html>
 
