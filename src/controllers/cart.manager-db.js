@@ -99,6 +99,20 @@ async agregarProductoAlCarrito(req, res) {
         res.status(500).json({ error: "Error al agregar un producto al carrito" });
     }};
 
+    async eliminarProductoDeCarrito(req, res) {
+        const cartId = req.params.cid;
+        const productId = req.params.pid;
+        try {
+            const updatedCart = await cartService.eliminarProducto(cartId, productId);
+            res.json({
+                status: 'success',
+                message: 'Producto eliminado del carrito correctamente',
+                updatedCart,
+            });
+        } catch (error) {
+            res.status(500).send("Error");
+        }
+    }
 
 }
 

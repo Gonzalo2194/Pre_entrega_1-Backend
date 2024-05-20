@@ -51,6 +51,12 @@
                             <td>{{this.quantity}}</td>
                             <td>{{this.product.price}}</td>
                             <td>{{multiply this.product.price this.quantity}}</td>
+                            <td>
+                                <button class="btn btn-success" onclick="editarProducto('{{this.product.id}}')">Editar</button>
+                                <button class="btn btn-danger"onclick="eliminarProducto('{{this.product.id}}')">Eliminar</button>
+                                <button class="btn btn-danger" onclick="eliminarProducto('{{cartId}}', '{{this._id}}')">Eliminar P</button>
+                            </td>
+                            
                         </tr>
                         {{/each}}
                     </tbody>
@@ -58,9 +64,33 @@
                 <div class="text-center">
                     <h3>Total: {{cart.total}}</h3>
                     <a href="/checkout" class="btn btn-primary">Proceder al Pago</a>
+                    <button class="btn btn-danger" onclick="vaciarCarrito ("{{this.cart.id}}")">Vaciar Carrito</button>
                 </div>
             </div>
         </div>
     </div>
+        <script>
+        async function eliminarProducto(cartId, productId) {
+        try {
+            const response = await fetch(`/api/cart/${cartId}/product/${productId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message);
+                // Actualiza la tabla o recarga la página para reflejar los cambios
+                location.reload();
+            } else {
+                const errorData = await response.json();
+                console.error('Error al eliminar el producto del carrito:', errorData.message);
+                alert('Error al eliminar el producto del carrito: ' + errorData.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al eliminar el producto del carrito');
+        }
+    }
+    </script>
 </body>
 </html>

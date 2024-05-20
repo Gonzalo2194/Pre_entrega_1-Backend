@@ -15,8 +15,8 @@ class CartService {
         async getCarritoById(cartId) {
             try {
             const carrito = await CartModel.findById(cartId).populate({
-                path: 'products.product', // Nombre del campo de referencia en el esquema del carrito
-                select: 'title' // Campos que deseas mostrar del producto (en este caso, solo el título)
+                path: 'products.product', 
+                select: 'title' 
             });
             
             if (!carrito) {
@@ -26,7 +26,7 @@ class CartService {
             return carrito;
         } catch (error) {
             console.log("Error al obtener carrito por Id:", error);
-        throw error; // Lanza el error para que sea capturado por el middleware de errores de Express
+        throw error; 
         }
     }
 
@@ -58,6 +58,24 @@ class CartService {
             console.log("Error al agregar un producto al carrito :", error);
             throw error;
         }}
+
+        async eliminarProductoDeCarrito(cartId, productId) {
+            try {
+                const cart = await Cart.findById(cartId);
+            if (!cart) {
+                throw new Error('Carrito no encontrado');
+            }
+            cart.products = cart.products.filter(product => product.productId !== productId);
+            await cart.save();
+
+            return cart;
+
+            } catch (error) {
+                throw new Error('Error al eliminar el producto del carrito');
+            }
+        };
+
+
 };
 
 
