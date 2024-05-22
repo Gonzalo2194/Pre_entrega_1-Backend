@@ -61,14 +61,14 @@ class CartService {
 
         async eliminarProductoDeCarrito(cartId, productId) {
             try {
-                const cart = await Cart.findById(cartId);
-            if (!cart) {
+                const carrito = await CartModel.findById(cartId);
+            if (!carrito) {
                 throw new Error('Carrito no encontrado');
             }
-            cart.products = cart.products.filter(product => product.productId !== productId);
-            await cart.save();
+            carrito.products = carrito.products.filter(product => product.productId !== productId);
+            await carrito.save();
 
-            return cart;
+            return carrito;
 
             } catch (error) {
                 throw new Error('Error al eliminar el producto del carrito');

@@ -100,10 +100,11 @@ async agregarProductoAlCarrito(req, res) {
     }};
 
     async eliminarProductoDeCarrito(req, res) {
-        const cartId = req.params.cid;
-        const productId = req.params.pid;
+        const cartId = req.params.cartId;
+        const productId = req.params.productId;
+        console.log(`Cart ID: ${cartId}, Product ID: ${productId}`);
         try {
-            const updatedCart = await cartService.eliminarProducto(cartId, productId);
+            const updatedCart = await cartService.eliminarProductoDeCarrito(cartId, productId);
             res.json({
                 status: 'success',
                 message: 'Producto eliminado del carrito correctamente',

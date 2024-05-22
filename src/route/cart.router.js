@@ -9,8 +9,8 @@ const cartManager = new CartManager
 cartRouter.post("/", cartManager.crearCarrito);
 cartRouter.get("/:cid", cartManager.getCarritoById);
 cartRouter.post("/:cartId/product/:productId", cartManager.agregarProductoAlCarrito,);
-cartRouter.delete("/:cartId/product/:productId", cartManager.eliminarProductoDeCarrito);
-
+//cartRouter.delete("/:cartId/product/:productId", cartManager.eliminarProductoDeCarrito);
+cartRouter.delete("/:cartId/product/:productId",cartManager.eliminarProductoDeCarrito);
 
 module.exports = cartRouter;
 
