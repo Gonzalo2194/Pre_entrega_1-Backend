@@ -92,8 +92,9 @@ async agregarProductoAlCarrito(req, res) {
         }
 
         // Llama al servicio para agregar el producto al carrito
-        const carrito = await cartService.agregarProductoAlCarrito(cartId, productId, quantity);
-        res.json(carrito);
+        await cartService.agregarProductoAlCarrito(cartId, productId, parseInt(quantity, 10));
+
+        res.redirect(`/api/cart/${cartId}`);
     } catch (error) {
         console.error("Error al agregar un producto al carrito:", error);
         res.status(500).json({ error: "Error al agregar un producto al carrito" });

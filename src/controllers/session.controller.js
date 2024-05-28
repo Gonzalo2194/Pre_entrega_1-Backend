@@ -40,6 +40,7 @@ class SessionController {
         if (req.session.login) {
             req.session.destroy();
         }
+        
         res.redirect("/login",);
     }
 

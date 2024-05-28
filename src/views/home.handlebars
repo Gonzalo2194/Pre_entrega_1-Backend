@@ -56,7 +56,7 @@
                                 <p class="card-text">Precio: {{this.price}}</p>
                             </div>
                     </form> 
-                    <form action="/api/carts/{{../cartId}}/product/{{#if this._id}}{{this._id}}{{/if}}" method="post">
+                    <form  action="/api/carts/{{../cartId}}/product/{{#if this._id}}{{this._id}}{{/if}}" method="post">
                         <input type="hidden" name="productId" value="{{this._id}}">
                         <input type="number" name="quantity" value="1"> 
                         <button type="submit">Agregar al carrito</button>
@@ -76,6 +76,5 @@
                 <a href="{{nextLink}}">Next</a>
             {{/if}}
         </div>
-
 
 

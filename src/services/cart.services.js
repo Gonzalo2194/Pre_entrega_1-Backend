@@ -42,11 +42,11 @@ class CartService {
                 return await nuevoCarrito.save();
                 
             }else{
-                const existeProducto = carrito.products.find(item => item.product.toString() === productId);}
+                existeProducto = carrito.products.find(item => item.product.toString() === productId);}
             
             if (existeProducto) {
-
                 existeProducto.quantity += quantity;
+                
             } else {
                 carrito.products.push({ product: productId, quantity });
             }

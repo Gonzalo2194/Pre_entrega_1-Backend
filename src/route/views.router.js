@@ -6,8 +6,8 @@ const UserModel = require("../models/user.model");
 const CartModel = require("../models/cart.model.js");
 const CartService = require("../services/cart.services.js");
 const cartService = new CartService();
-
-
+const ViewsController = require("../controllers/viewscontroller.js")
+const viewsController = new ViewsController();
 
 //ruta carrito
 vrouter.get('/', async (req, res) => {
@@ -109,7 +109,16 @@ vrouter.get('/api/cart/:cid', async (req, res) => {
     }
 });
 
+vrouter.get("/chat",viewsController.renderChat);
 
+// vrouter.get("/chat",async (req, res) => {
+//     try {
+//         res.render("layouts/chat",);
+//     } catch (error) {
+//         console.log("Error en la vista chat", error);
+//         res.status(500).json({ error: "Error interno del servidor" });
+//     }
+// });
 
 module.exports = vrouter;
 

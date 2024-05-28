@@ -10,6 +10,8 @@ const session = require('express-session');
 const ProductManager = require('./controllers/product.manager-db');
 const CartManager = require("./controllers/cart.manager-db.js");
 const cartManager = new CartManager();
+const CartService = require ("../src/services/cart.services.js");
+const cartService = new CartService();
 const exphbs = require('express-handlebars');
 const viewsRouter = require('../src/route/views.router.js');
 const productsRouter = require('../src/route/products.router.js');
@@ -19,7 +21,8 @@ const userRouter = require('../src/route/user.router.js');
 const UserModel = require('./models/user.model.js');
 const sessionRouter = require('../src/route/sessions.router.js');
 const productManager = new ProductManager();
-
+const ViewsController = require("../src/controllers/viewscontroller.js");
+const viewsController = new ViewsController();
 
 
 
@@ -40,6 +43,8 @@ const hbs = exphbs.create({
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', './src/views');
+
+
 app.use(express.static('./src/public'));
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
@@ -154,10 +159,18 @@ app.get('/register', async (req, res) => {
 
 app.get("/profile", async (req, res) => {
     try {
+        
         if (req.session && req.session.user) {
             const user = await UserModel.findOne({ email: req.session.user.email });
             if (user) {
-                res.render('layouts/profile', { user });
+                let cartId = req.session.cartId;
+
+                if (!cartId) {
+                    const nuevoCarrito = await cartService.crearCarrito({ products: [] });
+                    cartId = nuevoCarrito._id;
+                    req.session.cartId = cartId;
+                }
+                res.render('layouts/profile', { user, cartId });
             } else {
                 res.status(404).send('Usuario no encontrado');
             }
@@ -171,4 +184,18 @@ app.get("/profile", async (req, res) => {
 });
 
 
+app.get("/chat", (req, res) => viewsController.renderChat(req, res));
+
+let messages = [];
+io.on("connection", (socket) => {
+    console.log("Un cliente se conectó");
+
+    // Enviar historial de mensajes al nuevo cliente
+    socket.emit("message", messages);
+
+    socket.on("message", (data) => {
+        messages.push(data);
+        io.emit("message", messages);
+    });
+});
 
