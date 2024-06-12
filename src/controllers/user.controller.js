@@ -26,7 +26,7 @@ class UserController {
             if (error.message === 'El correo electrónico ya está registrado') {
                 return res.status(400).send({ status: 'error', message: 'El correo electrónico ya está registrado' });
             }
-            console.error('Error al procesar el registro del usuario:', error);
+            req.logger.info("error al registrar usuario");
             res.status(500).send({ status: 'error', message: 'Error interno del servidor' });
         }
     }

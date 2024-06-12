@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PUERTO = 8080;
+// const PUERTO = 8080;
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const passport = require('passport'); // Importa el módulo passport
@@ -23,9 +23,13 @@ const sessionRouter = require('../src/route/sessions.router.js');
 const productManager = new ProductManager();
 const ViewsController = require("../src/controllers/viewscontroller.js");
 const viewsController = new ViewsController();
+const AddLogger = require("../src/utils/loggers.js");
+const dotenv = require("dotenv");
+dotenv.config();
 
+//variables de entorno
 
-
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 // Configuración de Handlebars
 
 
@@ -48,7 +52,7 @@ app.set('views', './src/views');
 app.use(express.static('./src/public'));
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
-
+app.use(AddLogger.middleware());
 // Configuración de express-session
 
 app.use(session({      
@@ -90,13 +94,13 @@ app.use("/api/users", userRouter); // Ruta login
 
 
 
-
+const PUERTO = process.env.NODE_ENV === 'production' ? process.env.PORT_PROD : process.env.PORT_DEV || 8080;
 
 const httpServer = app.listen(PUERTO, () => {
     console.log(`Escuchando desde ${PUERTO}`);
 });
 
-
+// Iniciar el servidor de socket.io utilizando el mismo servidor HTTP
 const io = socket(httpServer);
 
 io.on("connection", async (socket) => {
@@ -198,4 +202,16 @@ io.on("connection", (socket) => {
         io.emit("message", messages);
     });
 });
+
+
+app.get("/loggertest", (req, res,) =>{
+    req.logger.debug("Este es un mensaje de debug");
+    req.logger.http("Este es un mensaje HTTP");
+    req.logger.info("Estamos navegando la app");
+    req.logger.warning("¡Cuidado!");
+    req.logger.error("Error ocurrido");
+    req.logger.fatal("Error fatal!");
+    
+    res.send("Logs generados!");
+    });
 

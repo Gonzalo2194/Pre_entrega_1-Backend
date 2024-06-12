@@ -56,7 +56,7 @@ class SessionController {
                 res.redirect("/profile")
 
             } catch (error) {
-                console.error('Error al autenticar en githubCallback:', error);
+                req.logger.error('Error al autenticar en githubCallback:', error);
             res.redirect("/login");
             }}
             

@@ -9,7 +9,7 @@ const cartService = new CartService();
 const ViewsController = require("../controllers/viewscontroller.js")
 const viewsController = new ViewsController();
 
-//ruta carrito
+
 vrouter.get('/', async (req, res) => {
     try {
         const products = await productManager.getProducts();
@@ -34,7 +34,7 @@ vrouter.get('/', async (req, res) => {
 
         });
     } catch (error) {
-        console.log("Error al obtener productos", error);
+        req.logger.info("error al obtener productos")
         res.status(500).json({ error: "Error interno del servidor" });
 
     }
@@ -46,7 +46,7 @@ vrouter.get('/realtimeproducts', async (req, res) => {
     try {
         res.render("realtimeproducts");
     } catch (error) {
-        console.log("Error en la vista real time", error);
+        req.logger.warning("Error en vista")
         res.status(500).json({ error: "Error interno del servidor" });
     }
 });
@@ -76,7 +76,7 @@ vrouter.get('/productlist', async (req, res) => {
 
         });
     } catch (error) {
-        console.log("Error al obtener productos", error);
+        req.logger.info("error al obtener productos")
         res.status(500).json({ error: "Error interno del servidor" });
 
     }
@@ -104,7 +104,7 @@ vrouter.get('/api/cart/:cid', async (req, res) => {
             }
         });
     } catch (error) {
-        console.error('Error al obtener productos del carrito:', error);
+        req.logger.info("error al obtener productos de carrito")
         res.status(500).render('error', { message: "Error interno del servidor" });
     }
 });
