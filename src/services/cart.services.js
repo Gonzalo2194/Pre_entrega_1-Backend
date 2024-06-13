@@ -65,17 +65,32 @@ class CartService {
             if (!carrito) {
                 throw new Error('Carrito no encontrado');
             }
-            carrito.products = carrito.products.filter(product => product.productId !== productId);
-            await carrito.save();
 
+            carrito.products = carrito.products.filter(product => product.product.toString() !== productId);
+            await carrito.save();
             return carrito;
 
             } catch (error) {
                 throw new Error('Error al eliminar el producto del carrito');
             }
         };
-
-
+        
+        async vaciarCarrito(cartId) {
+            try {
+                const carrito = await CartModel.findByIdAndUpdate(
+                    cartId,
+                    { products: [] },
+                    { new: true }
+                );
+    
+                if (!carrito) {
+                    throw new Error('Carrito no encontrado');
+                }
+                return carrito;
+            } catch (error) {
+                throw new Error("Error");
+            }
+        }
 };
 
 

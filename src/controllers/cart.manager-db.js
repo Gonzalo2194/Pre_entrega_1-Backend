@@ -115,7 +115,20 @@ async agregarProductoAlCarrito(req, res) {
             res.status(500).send("Error");
         }
     }
-
+    
+    async vaciarCarrito(req, res) {
+        const cartId = req.params.cartId;
+        try {
+            await cartService.vaciarCarrito(cartId);
+            res.json({
+                status: 'success',
+                message: 'Carrito vaciado correctamente',
+            });
+        } catch (error) {
+            console.error('Error al vaciar el carrito:', error);
+            res.status(500).json({ error: 'Error al vaciar el carrito' });
+        }
+    }
 }
 
 module.exports = CartManager;

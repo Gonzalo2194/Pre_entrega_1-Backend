@@ -46,14 +46,14 @@
                     </thead>
                     <tbody>
                         {{#each cart.products}}
-                        <tr>                          
+                        <tr id="product-{{this.product._id}}">                         
                             <td>{{this.product.title}}</td>
                             <td>{{this.quantity}}</td>
                             <td>{{this.product.price}}</td>
                             <td>{{multiply this.product.price this.quantity}}</td>
                             <td>
                                 <button class="btn btn-success" onclick="editarProducto('{{this.product.id}}')">Editar</button>
-                                <button class="btn btn-danger" onclick="eliminarProducto('{{this.cartId}}', '{{this.product._id}}')">Eliminar</button>
+                                <button class="btn btn-danger" onclick="eliminarProducto('{{../cart._id}}', '{{this.product._id}}')">Eliminar</button>
                             </td>
                             
                         </tr>
@@ -63,35 +63,50 @@
                 <div class="text-center">
                     <h3>Total: {{cart.total}}</h3>
                     <a href="/checkout" class="btn btn-primary">Proceder al Pago</a>
-                    <button class="btn btn-danger" onclick="vaciarCarrito ("{{this.cart.id}}")">Vaciar Carrito</button>
+                    <button class="btn btn-danger" onclick="vaciarCarrito('{{cart._id}}')">Vaciar Carrito</button>
+                    
                 </div>
             </div>
         </div>
     </div>
-        <script>
+
+
+    <script>
         async function eliminarProducto(cartId, productId) {
-
-            console.log(`Eliminando producto con Cart ID: ${cartId}, Product ID: ${productId}`);
-            
-        try {
-            const response = await fetch(`/api/cart/${cartId}/product/${productId}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                alert(result.message);
+            try {
+                const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    document.getElementById(`product-${productId}`).remove();
+                } else {
+                    throw new Error('Error al eliminar el producto del carrito');
+                }
                 location.reload();
-            } else {
-                const errorData = await response.json();
-                console.error('Error al eliminar el producto del carrito:', errorData.message);
-                alert('Error al eliminar el producto del carrito: ' + errorData.message);
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al eliminar el producto del carrito');
+            
         }
+
+        async function vaciarCarrito(cartId) {
+    try {
+        const response = await fetch(`/api/carts/${cartId}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al vaciar el carrito');
+        }
+        
+        // Solo recargar la página si la eliminación fue exitosa
+        location.reload();
+
+    } catch (error) {
+        console.error('Error al vaciar el carrito:', error);
+        alert('Error al vaciar el carrito');
     }
+}
     </script>
 </body>
 </html>

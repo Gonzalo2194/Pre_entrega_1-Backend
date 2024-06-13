@@ -99,6 +99,7 @@ vrouter.get('/api/cart/:cid', async (req, res) => {
 
         res.render('layouts/cart', {
             cart: {
+                _id: carrito._id,
                 products: carrito.products,
                 total: total
             }
