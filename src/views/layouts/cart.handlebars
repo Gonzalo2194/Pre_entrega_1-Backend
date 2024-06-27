@@ -129,7 +129,6 @@ async function logout(cartId) {
         alert('Cantidad no válida');
         return;
     }
-
     try {
         const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
             method: 'PUT',
@@ -142,7 +141,7 @@ async function logout(cartId) {
         if (!response.ok) {
             throw new Error('Error al actualizar cantidades');
         }
-        
+
         location.reload();
     } catch (error) {
         console.error('Error al actualizar cantidades:', error);
