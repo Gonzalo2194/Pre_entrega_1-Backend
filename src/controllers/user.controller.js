@@ -1,6 +1,6 @@
 const UserService = require('../services/user.services');
 const passport = require("passport");
-
+const CartModel = require("../models/cart.model.js");
 const userService = new UserService();
 
 class UserController {
@@ -12,7 +12,9 @@ class UserController {
 
             // Llamar al servicio de usuario para registrar el nuevo usuario
             const newUser = await userService.registerUser(req.body);
-
+            //Crear Carrito:
+            const nuevoCarrito = new CartModel();
+            await nuevoCarrito.save();
             // Si el registro fue exitoso, redirigir al perfil
             req.session.user = {
                 first_name: newUser.first_name,

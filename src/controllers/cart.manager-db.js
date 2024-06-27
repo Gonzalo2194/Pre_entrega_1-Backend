@@ -128,8 +128,65 @@ async agregarProductoAlCarrito(req, res) {
             console.error('Error al vaciar el carrito:', error);
             res.status(500).json({ error: 'Error al vaciar el carrito' });
         }
+    };
+
+    async actualizarProductosEnCarrito(req, res) {
+        const cartId = req.params.cid;
+        const updatedProducts = req.body;
+
+        try {
+            const updatedCart = await cartService.actualizarProductosEnCarrito(cartId, updatedProducts);
+            res.json(updatedCart);
+        } catch (error) {
+            console.error("Error al actualizar productos en el carrito:", error);
+            res.status(500).json({ error: "Error al actualizar productos en el carrito" });
+        }
     }
-}
+
+    /*async editarCantidadProducto(req, res) {
+        const cartId = req.params.cartId;
+        const productId = req.params.productId;
+        const newQuantity = parseInt(req.body.quantity, 10); 
+
+        if (isNaN(newQuantity) || newQuantity <= 0) {
+            return res.status(400).json({ error: "Cantidad no válida" });
+        }
+
+        try {
+            const updatedCart = await cartService.editarCantidadProducto(cartId, productId, newQuantity);
+            res.json({
+                status: "success",
+                message: "Cantidad del producto editada correctamente",
+                products: updatedCart.products
+            });
+        } catch (error) {
+            console.error("Error al editar la cantidad del producto en el carrito:", error);
+            res.status(500).json({ error: "Error al editar la cantidad del producto en el carrito" });
+        }
+    }
+}*/
+
+async editarCantidadProducto(req, res) {
+    const cartId = req.params.cartId;
+    const productId = req.params.productId;
+    const newQuantity = parseInt(req.body.quantity, 10); 
+
+    if (isNaN(newQuantity) || newQuantity <= 0) {
+        return res.status(400).json({ error: "Cantidad no válida" });
+    }
+
+    try {
+        const updatedCart = await cartService.editarCantidadProducto(cartId, productId, newQuantity);
+        res.json({
+            status: "success",
+            message: "Cantidad del producto editada correctamente",
+            products: updatedCart.products
+        });
+    } catch (error) {
+        console.error("Error al editar la cantidad del producto en el carrito:", error);
+        res.status(500).json({ error: "Error al editar la cantidad del producto en el carrito" });
+    }
+}}
 
 module.exports = CartManager;
 

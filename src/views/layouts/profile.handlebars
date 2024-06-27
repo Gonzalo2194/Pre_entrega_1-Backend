@@ -22,7 +22,7 @@
                     </li>
 
                     <li class="nav-item hover" role="presentation">
-                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/api/sessions/logout" aria-selected="false">Cerrar sesión</a>
+                        <a class="nav-link" href="javascript:void(0);" onclick="logout('{{cartId}}')" aria-selected="false">Cerrar sesión</a>
                     </li>
                     
                     <li class="nav-item hover" role="presentation">
@@ -53,6 +53,25 @@
                         {{/each}}
                     </tbody>
 </body>
+
+<script>
+        async function logout(cartId) {
+            if (confirm('¿Está seguro de que desea cerrar sesión? Esto eliminará su carrito.')) {
+                try {
+                    const response = await fetch(`/api/carts/${cartId}`, {
+                        method: 'DELETE'
+                    });
+                    if (!response.ok) {
+                        throw new Error('Error al vaciar el carrito');
+                    }
+                    window.location.href = '/api/sessions/logout';
+                } catch (error) {
+                    console.error('Error al vaciar el carrito:', error);
+                    alert('Error al vaciar el carrito');
+                }
+            }
+        }
+</script>
 </html>
 
 

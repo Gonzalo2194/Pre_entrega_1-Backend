@@ -16,9 +16,9 @@ const cartSchema = new mongoose.Schema({
         required: false,
     }
     }],
+    });
     
 
-});
 
 const CartModel = mongoose.model("carts", cartSchema);
 

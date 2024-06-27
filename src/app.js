@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-// const PUERTO = 8080;
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const passport = require('passport'); // Importa el módulo passport
@@ -74,12 +73,6 @@ main();
 
 ////////////////////////////////
 
-
-
-
-
-
-////////////////////////////////
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
