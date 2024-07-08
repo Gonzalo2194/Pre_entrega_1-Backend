@@ -40,6 +40,7 @@ const hbs = exphbs.create({
     },
     helpers: {
         multiply: (a, b) => a * b
+
     }
 });
 
@@ -164,7 +165,10 @@ app.get("/profile", async (req, res) => {
                     cartId = nuevoCarrito._id;
                     req.session.cartId = cartId;
                 }
-                res.render('layouts/profile', { user, cartId });
+                //res.render('layouts/profile', { user, cartId });
+                const isAdmin = user.role === 'admin';//NUEVO
+
+                res.render('layouts/profile', { user, cartId, isAdmin });//NUEVO
             } else {
                 res.status(404).send('Usuario no encontrado');
             }

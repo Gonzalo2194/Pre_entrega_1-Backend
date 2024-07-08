@@ -28,6 +28,11 @@
                     <li class="nav-item hover" role="presentation">
                         <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/chat" aria-selected="false">Chat en vivo</a>
                     </li>
+                {{#if isAdmin}}
+                <li class="nav-item hover" role="presentation">
+                    <a class="nav-link" href="/realtimeproducts">Publicar y actualizar productos</a>
+                </li>
+                {{/if}}
                 </ul>
             </div>
         </nav> 
@@ -40,6 +45,7 @@
         <p>Bienvenido, {{user.first_name}}.</p>
         <p>E-mail: {{user.email}}</p>
         <p>Edad: {{user.age}}</p>
+        <p>Role: {{user.role}}</p>
 
         </thead>
                     <tbody>
