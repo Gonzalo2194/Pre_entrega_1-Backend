@@ -27,7 +27,7 @@
 }
 
 .col {
-    flex: 1 1 50%; /* Cada columna ocupa la mitad del contenedor */
+    flex: 1 1 50%; 
 }
 
 .product-list {
@@ -38,7 +38,7 @@
 }
 
 .product-list .product-item {
-    flex: 0 0 calc(33.33% - 20px); /* Tres productos por fila */
+    flex: 0 0 calc(33.33% - 20px);
     background-color: #f0f0f0;
     padding: 10px;
     border-radius: 8px;
@@ -50,9 +50,9 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Asegura que el formulario ocupe todo el ancho disponible */
-    max-width: 600px; /* Ajusta el ancho máximo del formulario según sea necesario */
-    margin: 0 auto; /* Centra el formulario horizontalmente */
+    width: 100%; 
+    max-width: 600px; 
+    margin: 0 auto; 
 }
 
 .form-group {
@@ -97,4 +97,36 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+
+
+/*--------------------------------------------------------*/
+
+.reset-password-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.reset-password-form .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.reset-password-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.reset-password-form input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }

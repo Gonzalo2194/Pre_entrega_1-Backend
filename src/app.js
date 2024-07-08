@@ -25,8 +25,7 @@ const viewsController = new ViewsController();
 const AddLogger = require("../src/utils/loggers.js");
 const dotenv = require("dotenv");
 dotenv.config();
-
-//variables de entorno
+const SocketManager = require("./socket/socket.manager.js");
 
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 // Configuración de Handlebars
@@ -94,24 +93,9 @@ const httpServer = app.listen(PUERTO, () => {
     console.log(`Escuchando desde ${PUERTO}`);
 });
 
-// Iniciar el servidor de socket.io utilizando el mismo servidor HTTP
-const io = socket(httpServer);
+//websocket:
+new SocketManager(httpServer);
 
-io.on("connection", async (socket) => {
-    console.log("Un cliente se conectó conmigo");
-
-    // Emitir array de productos al cliente que se conectó:
-    socket.emit("productos", await productManager.getProducts());
-
-    socket.on("eliminarProducto", async (id) => {
-        await productManager.deleteProduct(id, io);
-    });
-
-    socket.on("agregarProducto", async (producto) => {
-        await productManager.addProduct(producto);
-        io.emit("productos", await productManager.getProducts());
-    });
-});
 
 app.get("/login", (req, res) => {
     if (req.session.login) {
@@ -184,18 +168,18 @@ app.get("/profile", async (req, res) => {
 
 app.get("/chat", (req, res) => viewsController.renderChat(req, res));
 
-let messages = [];
-io.on("connection", (socket) => {
-    console.log("Un cliente se conectó");
+// let messages = [];
+// io.on("connection", (socket) => {
+//     console.log("Un cliente se conectó");
 
-    // Enviar historial de mensajes al nuevo cliente
-    socket.emit("message", messages);
+//     // Enviar historial de mensajes al nuevo cliente
+//     socket.emit("message", messages);
 
-    socket.on("message", (data) => {
-        messages.push(data);
-        io.emit("message", messages);
-    });
-});
+//     socket.on("message", (data) => {
+//         messages.push(data);
+//         io.emit("message", messages);
+//     });
+// });
 
 
 app.get("/loggertest", (req, res,) =>{

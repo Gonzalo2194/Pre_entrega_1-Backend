@@ -42,7 +42,7 @@ const userController = new UserController();
 // Ruta para registrar un nuevo usuario
 router.post('/', userController.register);
 
-
+router.post('/requestPasswordReset', userController.requestResetPassword);
 
 
 

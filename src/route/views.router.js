@@ -111,6 +111,9 @@ vrouter.get('/api/cart/:cid', async (req, res) => {
 });
 
 vrouter.get("/chat",viewsController.renderChat);
+vrouter.get("/reset-password",viewsController.renderResetPassword);
+vrouter.get("/passwordcambio",viewsController.renderCambioPassword);
+vrouter.get("/confirmacion-envio",viewsController.renderConfirmacion);
 
 module.exports = vrouter;
 
