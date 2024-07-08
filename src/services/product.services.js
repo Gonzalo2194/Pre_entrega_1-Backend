@@ -68,7 +68,14 @@ class ProductService {
 
     async updateProductById(id, updatedProductData) {
         try {
-            const product = await productosModel.findByIdAndUpdate(id, updatedProductData);
+
+            const updates = {};
+            for (let key in updatedProductData) {
+                if (updatedProductData[key] !== "") {
+                    updates[key] = updatedProductData[key];
+                }
+            }
+            const product = await productosModel.findByIdAndUpdate(id, { $set: updates }, { new: true });
             if (!product) {
                 console.log("No se encontró el producto");
                 return null;

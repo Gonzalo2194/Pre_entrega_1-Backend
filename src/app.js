@@ -103,10 +103,7 @@ io.on("connection", async (socket) => {
     socket.emit("productos", await productManager.getProducts());
 
     socket.on("eliminarProducto", async (id) => {
-        await productManager.deleteProduct(id);
-
-        // Emitir el array actualizado de productos después de eliminar 
-        io.emit("productos", await productManager.getProducts());
+        await productManager.deleteProduct(id, io);
     });
 
     socket.on("agregarProducto", async (producto) => {

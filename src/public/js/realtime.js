@@ -22,6 +22,7 @@ const renderProductos = (productos) => {
                 <img src="${item.img}" class="card-img-top" alt="${item.title}">
                 <div class="card-body">
                     <h5 class="card-title">${item.title}</h5>
+                    <p class="card-text">ID: ${item._id}</p>
                     <p class="card-text">${item.description}</p>
                     <p class="card-text">$${item.price}</p>
                 </div>
@@ -68,6 +69,7 @@ const agregarProducto = () => {
     };
 
     socket.emit("agregarProducto", producto);
+
 };
 
 
@@ -76,5 +78,7 @@ const agregarProducto = () => {
 
 
 ////////////////////////////////////////////////////////////////////////
+
+
 
 

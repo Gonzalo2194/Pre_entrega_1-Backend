@@ -41,7 +41,76 @@
     <button type="submit">Agregar Producto</button>
 </form>
 
+<h2>Actualizar producto</h2>
+<form id="updateProductForm" method="POST">
+    <label for="updateId">ID del Producto:</label>
+    <input type="text" id="updateId" name="id" required>
+
+    <label for="updateTitle">Título:</label>
+    <input type="text" id="updateTitle" name="title">
+
+    <label for="updateDescription">Descripción:</label>
+    <input type="text" id="updateDescription" name="description">
+
+    <label for="updatePrice">Precio:</label>
+    <input type="number" id="updatePrice" name="price" min="0">
+
+    <label for="updateImg">Imagen:</label>
+    <input type="text" id="updateImg" name="img">
+
+    <label for="updateCode">Código:</label>
+    <input type="text" id="updateCode" name="code">
+
+    <label for="updateCategory">Categoría:</label>
+    <input type="text" id="updateCategory" name="category">
+
+    <label for="updateStock">Stock:</label>
+    <input type="number" id="updateStock" name="stock" min="0">
+
+    <label for="updateStatus">Estado:</label>
+    <select id="updateStatus" name="status">
+        <option value="true">Activo</option>
+        <option value="false">Inactivo</option>
+    </select>
+
+    <label for="updateThumbnail">Thumbnail:</label>
+    <input type="text" id="updateThumbnail" name="thumbnail">
+
+    <button type="submit">Actualizar Producto</button>
+</form>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js"></script>
 
 <script src="js/realtime.js"></script>
+
+<script>
+document.getElementById('updateProductForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('updateId').value;
+    const data = {
+        title: document.getElementById('updateTitle').value,
+        description: document.getElementById('updateDescription').value,
+        price: document.getElementById('updatePrice').value,
+        img: document.getElementById('updateImg').value,
+        code: document.getElementById('updateCode').value,
+        category: document.getElementById('updateCategory').value,
+        stock: document.getElementById('updateStock').value,
+        status: document.getElementById('updateStatus').value,
+        thumbnail: document.getElementById('updateThumbnail').value,
+    };
+
+    const response = await fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        alert("Producto actualizado correctamente");
+        socket.emit("obtenerProductos"); 
+    } else {
+        alert("Error al actualizar el producto");
+    }
+};
+
+</script>

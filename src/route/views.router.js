@@ -112,15 +112,6 @@ vrouter.get('/api/cart/:cid', async (req, res) => {
 
 vrouter.get("/chat",viewsController.renderChat);
 
-// vrouter.get("/chat",async (req, res) => {
-//     try {
-//         res.render("layouts/chat",);
-//     } catch (error) {
-//         console.log("Error en la vista chat", error);
-//         res.status(500).json({ error: "Error interno del servidor" });
-//     }
-// });
-
 module.exports = vrouter;
 
 
