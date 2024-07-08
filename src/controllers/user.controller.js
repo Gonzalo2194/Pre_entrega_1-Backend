@@ -59,6 +59,46 @@ class UserController {
             res.status(500).send("Error interno del servidor");
         }
     }
+
+    async resetResetPassword (req,res) {
+        const {email,password,token} = req.body;
+
+        try {
+            const user = await UserModel.findOne({email})
+
+            if(!user) {
+                return res.render("passwordcambio",{error: "Usuario no encontrado"})
+            }
+
+            const resetToken = user.resetToken;
+            if (!resetToken || resetToken.token !== token) {
+                return res.render("passwordreset", { error: "El token de restablecimiento de contraseña es inválido" });
+            }
+
+             // Verificar si el token ha expirado
+            const now = new Date();
+            if (now > resetToken.expiresAt) {
+                return res.redirect("/passwordcambio");
+            }
+
+             // chequear contraseña para que no sea como la anterior
+            if (isValidPassword(password, user)) {
+                return res.render("passwordcambio", { error: "La nueva contraseña no puede ser igual a la anterior" });
+            }
+
+             // Actualizar contraseña
+            user.password = createHash(password);
+            user.resetToken = undefined; 
+            await user.save();
+
+             // confirmación de cambio de contraseña
+            return res.redirect("/login");
+        } catch (error) {
+            console.error(error);
+            return res.status(500).render("passwordreset", { error: "Error interno del servidor" });
+        }
+    
+    }
 }
 
 module.exports = UserController;
