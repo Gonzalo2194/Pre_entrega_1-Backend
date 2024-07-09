@@ -29,9 +29,10 @@ const userSchema = mongoose.Schema({
     },
     role: {
         type: String,
+        enum: ['admin', 'usuario', 'premium'],
         default: function () {
-            // Establece el rol como "admin" si el correo es adminCoder@coder.com, sino "usuario"
-            return this.email === "adminCoder@coder.com" ? "admin" : "usuario";
+            // Establece el rol como "admin" si el correo contiene ".admin", sino "usuario"
+            return this.email.includes(".admin") ? "admin" : "usuario";
         },
     },
     resetToken: {
