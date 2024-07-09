@@ -88,7 +88,7 @@ app.use("/api/users", userRouter); // Ruta login
 
 
 const PUERTO = process.env.NODE_ENV === 'production' ? process.env.PORT_PROD : process.env.PORT_DEV || 8080;
-
+const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PUERTO, () => {
     console.log(`Escuchando desde ${PUERTO}`);
 });
