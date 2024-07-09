@@ -5,13 +5,15 @@ const userController = new UserController();
 const UserService = require('../services/user.services.js');
 const userService = new UserService();
 const upload = require('../middleware/multer.js');
-
+const authenticateJWT = require('../middleware/authmiddleware.js');
 
 router.post('/', userController.register);// Ruta para registrar un nuevo usuario
 
 router.post('/requestPasswordReset', userController.requestResetPassword);
 router.post('/reset-password', userController.renderResetPassword);
 router.put('/premium/:uid', userController.cambiarRolPremium);
+router.get("/admin", userController.admin); 
+
 
 
 router.post('/:uid/documents', upload.fields([{ name: "document" }, { name: "products" }, { name: "profile" }]), async (req, res) => {

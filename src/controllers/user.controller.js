@@ -131,6 +131,12 @@ class UserController {
             res.status(500).send("Error del servidor");
         }
     }
+    async admin(req, res) {
+        if (req.user.user.role !== "admin") {
+            return res.status(403).send("Acceso denegado");
+        }
+        res.render("layouts/admin");
+    }
 }
 
 module.exports = UserController;
