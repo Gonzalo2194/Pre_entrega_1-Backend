@@ -10,8 +10,8 @@ class ProductManager {
     async addProduct(req,res) {
         try {
             const { title, description, price, img, code, stock, category, status, thumbnail } = req.body;
-            const productData = { title, description, price, img, code, stock, category, status, thumbnail };
-    
+            const productData = { title, description, price, img, code, stock, category, status, thumbnail,status };
+
             const newProduct = await productService.addProduct(productData);
             res.json(newProduct);
             return newProduct;

@@ -1,0 +1,25 @@
+
+
+
+
+-que se sincronice con base de datos cantidad carrito
+
+-cuando ingresas después del login que lleve a la home y aparezca arriba quien se logueo (e-mail)
+-que nos e cree carrito si no hay session iniciada
+- que se mantenga carrito guardado en el usuario (MUST)
+
+-user premium
+_____________________________________________________________
+
+
+Hecho:
+-boton editar del carrito (hecho)
+-realtime aparezca solo para perfil admin en profile
+-boton eliminar de real time products
+-user restablecer contraseña
+-cambiar contraseña
+
+
+//// en views controler tiene product model, cart.repository (yo nada porque lo usé solo para el 
+
+ME QUEDO EN 1:25:41 falta controlador de cambiar contra

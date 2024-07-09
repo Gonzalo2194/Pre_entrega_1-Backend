@@ -1,12 +1,13 @@
 const UserService = require('../services/user.services');
+const userService = new UserService();
 const passport = require("passport");
 const CartModel = require("../models/cart.model.js");
 const UserModel = require('../models/user.model.js');
 const { generarResetToken } = require('../utils/tokenreset.js');
 const { createHash, isValidPassword } = require('../utils/hashbcrypt.js');
-const userService = new UserService();
 const EmailManager = require("../services/email.js")
 const emailManager = new EmailManager();
+
 class UserController {
     async register(req, res) {
         try {
@@ -24,7 +25,8 @@ class UserController {
                 first_name: newUser.first_name,
                 last_name: newUser.last_name,
                 email: newUser.email,
-                age: newUser.age
+                age: newUser.age,
+                
             };
             res.redirect('/profile');
         } catch (error) {
@@ -103,15 +105,29 @@ class UserController {
 
     async cambiarRolPremium(req, res) {
         const { uid } = req.params;
+
         try {
-            const user = await UserModel.findById(uid);
+            const user = await userService.findById(uid);
             if (!user) {
-                return res.status(404).send("Usuario no encotrado");
+                return res.status(404).send("Usuario no encontrado");
             }
+
+            const documentacionRequerida = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
+            const userDocuments = user.documents.map(doc => doc.name);
+            const tieneDocumentacion = documentacionRequerida.every(doc => userDocuments.includes(doc));
+
+            if (!tieneDocumentacion) {
+                return res.status(400).send("Falta documentación por cargar para ser premium");
+            }
+
             const nuevoRol = user.role === "usuario" ? "premium" : "usuario";
-            const actualizado = await UserModel.findByIdAndUpdate(uid, { role: nuevoRol });
-            res.json(actualizado);
+            user.role = nuevoRol;
+
+            await user.save();
+
+            res.json({ role: nuevoRol });
         } catch (error) {
+            console.error(error);
             res.status(500).send("Error del servidor");
         }
     }

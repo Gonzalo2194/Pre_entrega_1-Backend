@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud Premium</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-5">Solicitud para ser Premium</h1>
+        <form action="/users/{{uid}}/documents" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="identificacion">Identificación (DNI, Cédula, etc.)</label>
+                <input type="file" class="form-control-file" id="identificacion" name="document" accept=".pdf,.jpg,.png" required>
+            </div>
+            <div class="form-group">
+                <label for="domicilio">Comprobante de domicilio</label>
+                <input type="file" class="form-control-file" id="domicilio" name="document" accept=".pdf,.jpg,.png" required>
+            </div>
+            <div class="form-group">
+                <label for="estadoCuenta">Comprobante de estado de cuenta</label>
+                <input type="file" class="form-control-file" id="estadoCuenta" name="document" accept=".pdf,.jpg,.png" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar Documentos</button>
+        </form>
+    </div>
+</body>
+
+</html>

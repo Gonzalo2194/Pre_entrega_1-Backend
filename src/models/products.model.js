@@ -36,6 +36,11 @@ const productSchema = new mongoose.Schema ({
         required:true,
         },
     thumbnail:[],
+    owner: {
+        type: String, 
+        required: true, 
+        default: 'admin'
+        }
 });
 
 //defino modelo

@@ -149,10 +149,8 @@ app.get("/profile", async (req, res) => {
                     cartId = nuevoCarrito._id;
                     req.session.cartId = cartId;
                 }
-                //res.render('layouts/profile', { user, cartId });
-                const isAdmin = user.role === 'admin';//NUEVO
-
-                res.render('layouts/profile', { user, cartId, isAdmin });//NUEVO
+                const isAdmin = user.role === 'admin';
+                res.render('layouts/profile', { user, cartId, isAdmin });
             } else {
                 res.status(404).send('Usuario no encontrado');
             }
@@ -165,23 +163,10 @@ app.get("/profile", async (req, res) => {
     }
 });
 
-
 app.get("/chat", (req, res) => viewsController.renderChat(req, res));
 
-// let messages = [];
-// io.on("connection", (socket) => {
-//     console.log("Un cliente se conectó");
 
-//     // Enviar historial de mensajes al nuevo cliente
-//     socket.emit("message", messages);
-
-//     socket.on("message", (data) => {
-//         messages.push(data);
-//         io.emit("message", messages);
-//     });
-// });
-
-
+//logger
 app.get("/loggertest", (req, res,) =>{
     req.logger.debug("Este es un mensaje de debug");
     req.logger.http("Este es un mensaje HTTP");

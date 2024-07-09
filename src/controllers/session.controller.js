@@ -2,7 +2,7 @@ const SessionService = require('../services/session.service');
 const sessionService = new SessionService();
 const passport = require('passport');
 const { isValidPassword } = require('../utils/hashbcrypt.js');
-
+const UserModel = require('../models/user.model.js');
 
 class SessionController {
     async login(req, res, next) {
@@ -18,6 +18,10 @@ class SessionController {
                 if (!isValidPassword(req.body.password, user)) {
                     return res.status(400).send({ status: "error", message: "Contraseña incorrecta" });
                 }
+
+                user.last_connection = Date.now();
+                await user.save();
+                
                 req.session.user = {
                     first_name: user.first_name,
                     last_name: user.last_name,
@@ -36,12 +40,28 @@ class SessionController {
         res.send({ error: "Login fallido" });
     }
 
+    // async logout(req, res) {
+    //     if (req.session.login) {
+    //         req.session.destroy();
+    //     }
+        
+    //     res.redirect("/login",);
+    // }
+
     async logout(req, res) {
         if (req.session.login) {
+            // Actualizar last_connection en logout
+            const userEmail = req.session.user.email;
+            const user = await UserModel.findOne({ email: userEmail });
+            if (user) {
+                user.last_connection = Date.now();
+                await user.save();
+            }
+
             req.session.destroy();
         }
-        
-        res.redirect("/login",);
+
+        res.redirect("/login");
     }
 
     async githubLogin(req, res) {
@@ -54,6 +74,7 @@ class SessionController {
                 req.session.user = req.user;
                 req.session.login = true;
                 res.redirect("/profile")
+
 
             } catch (error) {
                 req.logger.error('Error al autenticar en githubCallback:', error);

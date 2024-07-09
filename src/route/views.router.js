@@ -42,9 +42,10 @@ vrouter.get('/', async (req, res) => {
 
 
 
+
 vrouter.get('/realtimeproducts', async (req, res) => {
     try {
-        res.render("realtimeproducts");
+        res.render("realtimeproducts")
     } catch (error) {
         req.logger.warning("Error en vista")
         res.status(500).json({ error: "Error interno del servidor" });

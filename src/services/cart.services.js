@@ -1,5 +1,6 @@
 const CartModel = require("../models/cart.model.js");
 const mongoose = require('mongoose');
+const TicketModel = require("../models/ticket.model.js")
 
 class CartService {
     async crearCarrito(cartData) {
@@ -108,30 +109,6 @@ class CartService {
                 throw new Error ("error");
             }
         }
-    
-       /* async editarCantidadProducto(cartId, productId, newQuantity) {
-            try {
-                const carrito = await CartModel.findById(cartId);
-                if (!carrito) {
-                    throw new Error('Carrito no encontrado');
-                }
-    
-                const productIndex = carrito.products.findIndex(item => item.product.toString() === productId);
-                if (productIndex !== -1) {
-                    carrito.products[productIndex].quantity = newQuantity;
-    
-                    carrito.markModified("products");
-                    await carrito.save();
-                    return carrito;
-                } else {
-                    throw new Error('Producto no encontrado en el carrito');
-                }
-            } catch (error) {
-                console.error('Error al editar la cantidad del producto en el carrito:', error);
-                throw new Error('Error al editar la cantidad del producto en el carrito');
-            }
-        }
-    }*/
 
     async editarCantidadProducto(cartId, productId, newQuantity) {
         try {
@@ -153,6 +130,32 @@ class CartService {
         } catch (error) {
             console.error('Error al editar la cantidad del producto en el carrito:', error);
             throw new Error('Error al editar la cantidad del producto en el carrito');
+        }
+    }
+    async obtenerProductosDeCarrito(idCarrito) {
+        try {
+            const carrito = await CartModel.findById(idCarrito);
+            if (!carrito) {
+                console.log("No existe ese carrito con el id");
+                return null;
+            }
+            return carrito;
+        } catch (error) {
+            throw new Error("Error");
+        }
+    }
+    async agregarProductosATicket(products, purchaser) {
+        try {
+            const ticket = new TicketModel({
+                code: generateUniqueCode(),
+                purchase_datetime: new Date(),
+                amount: calcularTotal(products),
+                purchaser
+            });
+            await ticket.save();
+            return ticket;
+        } catch (error) {
+            throw new Error("Error");
         }
     }
 }

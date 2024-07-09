@@ -11,6 +11,7 @@ cartRouter.get("/:cid", cartManager.getCarritoById);
 cartRouter.post("/:cartId/product/:productId", cartManager.agregarProductoAlCarrito,);
 cartRouter.delete("/:cartId/product/:productId",cartManager.eliminarProductoDeCarrito);
 cartRouter.delete("/:cartId",cartManager.vaciarCarrito);
+cartRouter.post('/:cid/purchase', cartManager.finalizarCompra);
 
 cartRouter.put('/:cartId/product/:productId', cartManager.editarCantidadProducto);
 cartRouter.put('/:cid', cartManager.actualizarProductosEnCarrito);

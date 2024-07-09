@@ -1,0 +1,24 @@
+Para empezar
+
+1- npm install --yes
+2 - npm i express
+npm init --yes 
+3- npm i nodemon -D
+4 - en package.json - colocar debajo de test: "dev": "nodemon src/app.js"
+
+_______________________________________________________________________--
+
+Middleware:
+
+Metodo get para que devuelva el array de usuarios cuando es consultado:
+app.get("/api/users",(req, res) => {
+    res.json(users);
+})
+Metodo post:
+//para crear datos nuevos usuarios
+
+app.post("/api/users",(req, res) => {
+    const nuevoUsuario = req.body;
+    users.push(nuevoUsuario);
+    res.send({status:"success",message:"Usuario creado correctamente"});
+})
