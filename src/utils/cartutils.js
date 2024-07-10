@@ -17,11 +17,18 @@ const calcularTotal = (products) => {
     let total = 0;
 
     products.forEach(item => {
-        total += item.product.price * item.quantity;
+        if (item.product && typeof item.product.price === 'number' && typeof item.quantity === 'number') {
+            total += item.product.price * item.quantity;
+            console.log(`Producto: ${item.product.title}, Precio Unitario: ${item.product.price}, Cantidad: ${item.quantity}, Subtotal: ${subtotal}`);
+            total += subtotal;
+        } else {
+            console.error('Error: Producto o cantidad inválidos:', item);
+        }
     });
 
     return total;
 }
+
 
 module.exports = {
     generateUniqueCode,

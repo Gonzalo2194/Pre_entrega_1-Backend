@@ -9,12 +9,29 @@ class ProductManager {
 
     async addProduct(req,res) {
         try {
-            const { title, description, price, img, code, stock, category, status, thumbnail } = req.body;
-            const productData = { title, description, price, img, code, stock, category, status, thumbnail,status };
-
+            const { title, description, price, img, code, stock, category, status, thumbnail, owner } = req.body;
+            const ownerEmail = req.session.user?.email || 'admin';
+            
+            const productData = { 
+                title, 
+                description, 
+                price, 
+                img, 
+                code, 
+                stock, 
+                category, 
+                status, 
+                thumbnail,
+                owner: ownerEmail || 'admin' 
+            };
+    
             const newProduct = await productService.addProduct(productData);
-            res.json(newProduct);
-            return newProduct;
+            req.session.message = 'Producto creado correctamente';
+
+        // Redirigir a la página de productos en tiempo real
+        res.redirect('/realtimeproducts');
+            // res.json(newProduct);
+            // return newProduct;
         } catch (error) {
             console.log("Error al agregar producto:", error); 
             res.status(500).json({ error: "Error al agregar producto" }); 

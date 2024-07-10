@@ -30,7 +30,7 @@
                 </li>
 
                 <li class="nav-item hover" role="presentation">
-                    <a class="nav-link" href="javascript:void(0);" onclick="logout('{{cartId}}')"
+                    <a class="nav-link" href="javascript:void(0);" onclick="logout('{{cart._id}}')"
                         aria-selected="false">Cerrar sesión</a>
                 </li>
             </ul>
@@ -76,7 +76,7 @@
                         <div class="form-group">
                             <label for="email">Email:</label>
                             <input type="email" class="form-control" id="email" name="email" required>
-                            
+
                         </div>
                         <button type="submit" class="btn btn-primary">Proceder al Pago</button>
                     </form>
@@ -138,7 +138,7 @@
                     alert('Error al vaciar el carrito');
                 }
             }
-        };
+        }
 
         async function editarProducto(productId, cartId) {
             const newQuantity = prompt('Ingrese la nueva cantidad:');

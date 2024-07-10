@@ -1,26 +1,33 @@
-
 <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container-fluid">
-                <ul class="nav nav-pills ms-auto mb-3" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"  type="button" role="tab" aria-controls="pills-home" aria-selected="true" href="/">Home</a>
-                    </li>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <ul class="nav nav-pills ms-auto mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                        type="button" role="tab" aria-controls="pills-home" aria-selected="true" href="/">Home</a>
+                </li>
 
-                    <li class="nav-item hover" role="presentation">
-                        <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" href="/productlist" aria-selected="false">Productos</a>
-                    </li>
+                <li class="nav-item hover" role="presentation">
+                    <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+                        type="button" role="tab" aria-controls="pills-profile" href="/productlist"
+                        aria-selected="false">Productos</a>
+                </li>
 </header>
 
 <h1>Real time products</h1>
 
 <body>
+    {{#if message}}
+    <div class="alert alert-success">
+        {{message}}
+    </div>
+    {{/if}}
 
-        <div class="container">
+    <div class="container">
         <div class="row mt-3">
             <div id="contenedorProductos" class="row"></div>
         </div>
-    
+
         <div class="row mt-4">
             <div class="col">
                 <h2>Actualizar Producto</h2>
@@ -127,7 +134,6 @@
                             <option value="false">Inactivo</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label for="thumbnail">Thumbnail:</label>
                         <input type="text" id="thumbnail" name="thumbnail" value="sin thumbnail">
@@ -135,6 +141,7 @@
 
                     <button type="submit" class="btn-submit">Agregar Producto</button>
                 </form>
+
             </div>
         </div>
     </div>
@@ -145,33 +152,33 @@
 <script src="js/realtime.js"></script>
 
 <script>
-document.getElementById('updateProductForm').onsubmit = async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('updateId').value;
-    const data = {
-        title: document.getElementById('updateTitle').value,
-        description: document.getElementById('updateDescription').value,
-        price: document.getElementById('updatePrice').value,
-        img: document.getElementById('updateImg').value,
-        code: document.getElementById('updateCode').value,
-        category: document.getElementById('updateCategory').value,
-        stock: document.getElementById('updateStock').value,
-        status: document.getElementById('updateStatus').value,
-        thumbnail: document.getElementById('updateThumbnail').value,
+    document.getElementById('updateProductForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('updateId').value;
+        const data = {
+            title: document.getElementById('updateTitle').value,
+            description: document.getElementById('updateDescription').value,
+            price: document.getElementById('updatePrice').value,
+            img: document.getElementById('updateImg').value,
+            code: document.getElementById('updateCode').value,
+            category: document.getElementById('updateCategory').value,
+            stock: document.getElementById('updateStock').value,
+            status: document.getElementById('updateStatus').value,
+            thumbnail: document.getElementById('updateThumbnail').value,
+        };
+
+        const response = await fetch(`/api/products/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            alert("Producto actualizado correctamente");
+            socket.emit("obtenerProductos");
+        } else {
+            alert("Error al actualizar el producto");
+        }
     };
-
-    const response = await fetch(`/api/products/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-        alert("Producto actualizado correctamente");
-        socket.emit("obtenerProductos"); 
-    } else {
-        alert("Error al actualizar el producto");
-    }
-};
 
 </script>

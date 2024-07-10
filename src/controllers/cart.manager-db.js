@@ -1,19 +1,17 @@
-
-const CartModel = require("../models/cart.model.js");
 const CartService = require("../services/cart.services.js");
 const cartService = new CartService();
 const mongoose = require('mongoose');
 const ProductService = require("../services/product.services.js");
 const productService = new ProductService();
 const EmailManager = require("../services/email.js")
+const emailManager = new EmailManager();
 const TicketService = require("../services/ticket.service.js");
 const ticketService = new TicketService();
-const TicketModel = require("../models/ticket.model.js");
 const { generateUniqueCode, calcularTotal } = require("../utils/cartutils.js");
 const UserModel = require("../models/user.model.js");
 
+
 class CartManager {
-    
 
     async crearCarrito(req, res) {
         try {
@@ -47,12 +45,10 @@ class CartManager {
             const { cartId, productId } = req.params;
             const { quantity } = req.body;
 
-            // Verificar si 'cartId', 'productId' y 'quantity' están definidos y tienen valores válidos
             if (!cartId || !productId || isNaN(quantity)) {
                 return res.status(400).json({ error: "Parámetros de solicitud incorrectos" });
             }
 
-            // Llama al servicio para agregar el producto al carrito
             await cartService.agregarProductoAlCarrito(cartId, productId, parseInt(quantity, 10));
 
             res.redirect(`/api/cart/${cartId}`);
@@ -127,78 +123,94 @@ class CartManager {
         }
     }
     async finalizarCompra(req, res) {
-    
-    const cartId = req.params.cartId;
-    const { email } = req.body; 
 
-    try {
-        
-        if (!cartId) {
-            return res.status(400).json({ error: "Se requiere proporcionar el cartId en la consulta" });
-        }
+        const cartId = req.params.cartId;
+        const { email } = req.body;
 
-        const cart = await cartService.obtenerProductosDeCarrito(cartId);
-        if (!cart) {
-            return res.status(404).json({ error: "No se encontró el carrito" });
-        }
-        const products = cart.products;
-
-        const productosNoDisponibles = [];
-        for (const item of products) {
-            const productId = item.product;
-            const product = await productService.getProductById(productId);
-            if (!product || product.stock < item.quantity) {
-                productosNoDisponibles.push(productId);
-            }
-        }
-
-        if (productosNoDisponibles.length > 0) {
-            return res.status(400).json({
-                message: 'Algunos productos no están disponibles en la cantidad requerida',
-                productosNoDisponibles
-            });
-        }
-
-
-        let userWithCart = null;
+        console.log('CartId recibido:', cartId);
+        console.log('Email recibido:', email);
         try {
-            userWithCart = await UserModel.findOne({ cart: cartId });
+            if (!cartId) {
+                return res.status(400).json({ error: "Se requiere proporcionar el cartId en la consulta" });
+            }
+
+            const products = await cartService.obtenerProductosDeCarrito(cartId);
+
+
+            if (!Array.isArray(products) || products.length === 0) {
+                return res.status(400).json({ error: "La propiedad products del carrito es inválida o está vacía" });
+            }
+
+
+            const productosNoDisponibles = [];
+            for (const item of products) {
+                if (!item.product || !item.quantity) {
+                    return res.status(400).json({ error: "Los productos en el carrito no tienen la estructura esperada" });
+                }
+                const productId = item.product;
+                const product = await productService.getProductById(productId);
+                if (!product || product.stock < item.quantity) {
+                    productosNoDisponibles.push(productId);
+                }
+            }
+
+            if (productosNoDisponibles.length > 0) {
+                return res.status(400).json({
+                    message: 'Algunos productos no están disponibles en la cantidad requerida',
+                    productosNoDisponibles
+                });
+            }
+
+
+            let userWithCart = null;
+            try {
+                userWithCart = await UserModel.findOne({ cart: cartId });
+            } catch (error) {
+                console.error('Error al buscar al usuario con el carrito:', error);
+            }
+
+            const ticket = await ticketService.crearTicket({
+                code: generateUniqueCode(),
+                purchase_datetime: new Date(),
+                amount: calcularTotal(products),
+                purchaser: userWithCart ? userWithCart._id : null,
+                products: products
+            });
+
+
+            for (const item of products) {
+                const productId = item.product;
+                const product = await productService.getProductById(productId);
+                if (!product) {
+                    return res.status(404).json({ error: `Producto con ID ${productId} no encontrado` });
+                }
+                if (product.stock < item.quantity) {
+                    return res.status(400).json({ error: `Producto ${product.title} no disponible en la cantidad requerida` });
+                }
+                product.stock -= item.quantity;
+                await product.save();
+            }
+
+
+            await cartService.vaciarCarrito(cartId);
+
+
+            if (email) {
+                await emailManager.enviarCorreoCompra(email, userWithCart ? userWithCart.first_name : "", ticket._id);
+            }
+
+
+            res.render("layouts/checkout", {
+                cliente: userWithCart ? userWithCart.first_name : "",
+                email: email || "",
+                numTicket: ticket._id
+            });
+
         } catch (error) {
-            console.error('Error al buscar al usuario con el carrito:', error);
+            console.error('Error al procesar la compra:', error);
+            res.status(500).json({ error: 'Error interno del servidor' });
         }
-
-        const ticket = await ticketService.crearTicket({
-            code: generateUniqueCode(),
-            purchase_datetime: new Date(),
-            amount: calcularTotal(cart.products),
-            purchaser: userWithCart ? userWithCart._id : null, 
-            products: cart.products
-        });
-
-        for (const item of products) {
-            const productId = item.product;
-            const product = await productService.getProductById(productId);
-            product.stock -= item.quantity;
-            await product.save();
-        }
-
-        await cartService.vaciarCarrito(cartId);
-
-
-        if (email) {
-            await EmailManager.enviarCorreoCompra(email, userWithCart ? userWithCart.first_name : "", ticket._id);
-        }
-
-        res.render("checkout", {
-            cliente: userWithCart ? userWithCart.first_name : "",
-            email: email || "",
-            numTicket: ticket._id
-        });
-    } catch (error) {
-        console.error('Error al procesar la compra:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
     }
-}
 }
 module.exports = CartManager;
 

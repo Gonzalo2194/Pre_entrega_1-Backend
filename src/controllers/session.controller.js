@@ -40,14 +40,6 @@ class SessionController {
         res.send({ error: "Login fallido" });
     }
 
-    // async logout(req, res) {
-    //     if (req.session.login) {
-    //         req.session.destroy();
-    //     }
-        
-    //     res.redirect("/login",);
-    // }
-
     async logout(req, res) {
         if (req.session.login) {
             // Actualizar last_connection en logout

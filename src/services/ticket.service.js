@@ -1,9 +1,13 @@
 const TicketModel = require('../models/ticket.model.js');
 
-
 class TicketService {
     async crearTicket(ticketData) {
         try {
+
+            if (typeof ticketData.amount !== 'number' || isNaN(ticketData.amount)) {
+                throw new Error('El campo amount debe ser un número válido');
+            }
+
             const ticket = new TicketModel(ticketData);
             await ticket.save();
             return ticket;
@@ -13,5 +17,6 @@ class TicketService {
         }
     }
 }
+
 
 module.exports = TicketService;
