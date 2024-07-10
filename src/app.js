@@ -30,7 +30,6 @@ const SocketManager = require("./socket/socket.manager.js");
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 // Configuración de Handlebars
 
-
 const hbs = exphbs.create({
     defaultLayout: 'main',
     runtimeOptions: {
@@ -39,14 +38,12 @@ const hbs = exphbs.create({
     },
     helpers: {
         multiply: (a, b) => a * b
-
     }
 });
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', './src/views');
-
 
 app.use(express.static('./src/public'));
 app.use(express.json({ extended: true }));
@@ -64,20 +61,16 @@ app.use(session({
     })
 }));
 
-
 const main = async () => {
-    await mongoose.connect("mongodb+srv://gonzalosoto2194:Yanigonza0721@cluster0.rp4awlz.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Cluster0")
+    await mongoose.connect("mongodb+srv://gonzalosoto2194:Yanigonza0721@cluster0.rp4awlz.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Cluster0");
 }
 
 main();
-
-////////////////////////////////
 
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-////////////////////////////////
 app.use("/api/sessions", sessionRouter); // Ruta de sesión
 // Rutas
 app.use("/api/products", productsRouter);
@@ -85,17 +78,13 @@ app.use("/api/carts", cartRouter);
 app.use("/", viewsRouter);
 app.use("/api/users", userRouter); // Ruta login
 
-
-
 const PUERTO = process.env.NODE_ENV === 'production' ? process.env.PORT_PROD : process.env.PORT_DEV || 8080;
-const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PUERTO, () => {
     console.log(`Escuchando desde ${PUERTO}`);
 });
 
-//websocket:
+// Websocket:
 new SocketManager(httpServer);
-
 
 app.get("/login", (req, res) => {
     if (req.session.login) {
@@ -105,7 +94,6 @@ app.get("/login", (req, res) => {
     }
 });
 
-
 app.get("/usuario", (req, res) => {
     if (req.session.usuario) {
         return res.send(`El usuario registrado es: ${req.session.usuario.email}`);
@@ -113,21 +101,19 @@ app.get("/usuario", (req, res) => {
     res.send("No hay usuario registrado en la sesión");
 });
 
-
 function auth(req, res, next) {
-            if (req.session.login && req.session.admin) {
-                return next();
-            }
-            return res.status(401).send("Error de autorización");
-        }
-        
+    if (req.session.login && req.session.admin) {
+        return next();
+    }
+    return res.status(401).send("Error de autorización");
+}
+
 // Ruta admin
-        app.get("/admin", auth, (req, res) => {
-            res.send("Bienvenido, administrador");
-        });
+app.get("/admin", auth, (req, res) => {
+    res.send("Bienvenido, administrador");
+});
 
-//Register:
-
+// Register:
 app.get('/register', async (req, res) => {
     if (req.session.login) {
         return res.redirect("/profile");
@@ -138,7 +124,6 @@ app.get('/register', async (req, res) => {
 
 app.get("/profile", async (req, res) => {
     try {
-        
         if (req.session && req.session.user) {
             const user = await UserModel.findOne({ email: req.session.user.email });
             if (user) {
@@ -165,16 +150,14 @@ app.get("/profile", async (req, res) => {
 
 app.get("/chat", (req, res) => viewsController.renderChat(req, res));
 
-
-//logger
-app.get("/loggertest", (req, res,) =>{
+// Logger
+app.get("/loggertest", (req, res) =>{
     req.logger.debug("Este es un mensaje de debug");
     req.logger.http("Este es un mensaje HTTP");
     req.logger.info("Estamos navegando la app");
     req.logger.warning("¡Cuidado!");
     req.logger.error("Error ocurrido");
     req.logger.fatal("Error fatal!");
-    
-    res.send("Logs generados!");
-    });
 
+    res.send("Logs generados!");
+});
