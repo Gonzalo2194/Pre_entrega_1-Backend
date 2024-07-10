@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const UserModel = require('../models/user.model.js'); // Ajusta la ruta según tu estructura
+const UserModel = require('../models/user.model.js'); 
 
 const authenticateJWT = (req, res, next) => {
     const authHeader = req.headers.authorization;
