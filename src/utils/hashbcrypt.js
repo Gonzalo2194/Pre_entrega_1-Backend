@@ -1,10 +1,8 @@
+const bcrypt = require('bcryptjs');
 
-const bcrypt = require('bcrypt');
-
-//se crean 2 contraseñas; a) se crea hash a la contraseña; b) se creala contraseña y se compara.
-
+// Se crean 2 funciones para: a) crear hash de la contraseña; b) comparar la contraseña con el hash almacenado.
 const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
-const isValidPassword = (password,user) => bcrypt.compareSync(password,user.password);
+const isValidPassword = (password, user) => bcrypt.compareSync(password, user.password);
 
-module.exports = {createHash, isValidPassword}
+module.exports = { createHash, isValidPassword };
